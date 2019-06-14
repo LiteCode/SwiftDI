@@ -2,7 +2,7 @@
 
 It's try to use `@propertyDelegate` for DI. Right now SwiftDI is early alpha version. **Be careful!**
 
-### How to use
+## How it use?
 
 1) Create your container:
 
@@ -45,3 +45,19 @@ container.loadPart(MyAssembly.self)
 ```swift
 SwiftDI.sharedContainer = container
 ```
+
+6) Use your DI
+
+```swift 
+class MyController: UIViewController {
+    @Injectable var service: MyServiceInput
+}
+```
+
+Does it! You're finish setup your DI container.
+
+## How it works?
+
+SwiftDI using `@propertyDelegate` to use power of injection.
+`@Injectable` it's struct uses `SwiftDI.sharedContainer` for resolve objects when `value` is call. 
+
