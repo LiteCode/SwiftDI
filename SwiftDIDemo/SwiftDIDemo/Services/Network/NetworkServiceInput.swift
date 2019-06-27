@@ -8,6 +8,7 @@
 
 import SwiftUI
 
-protocol NetworkServiceInput: BindableObject {
+protocol NetworkServiceInput {
+    var hasData: Bool { get }
     func getData()
 }

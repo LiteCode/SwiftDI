@@ -11,7 +11,7 @@ import SwiftDI
 
 struct ContentView : View {
     
-    @BindObjectInjectable var networkService: NetworkService
+    @BindObjectInjectable var networkService: NetworkServiceInput
     
     var body: some View {
         NavigationView {

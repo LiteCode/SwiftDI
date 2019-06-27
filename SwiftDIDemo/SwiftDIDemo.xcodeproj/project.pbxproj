@@ -47,6 +47,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CD10132222C5241200E39652 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		CD3630D222C4E06300108376 = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +105,7 @@
 		CD8BBE0E22C503240082C255 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				CD10132222C5241200E39652 /* ViewModel */,
 				CD8BBE1222C503550082C255 /* View */,
 				CD8BBE1122C5034C0082C255 /* Assembly */,
 			);

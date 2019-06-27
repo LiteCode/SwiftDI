@@ -9,13 +9,12 @@
 import UIKit
 import SwiftDI
 
-let container = DIContainer()
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        let container = DIContainer()
         container.appendPart(ServicesAssembly.self)
         SwiftDI.useContainer(container)
         

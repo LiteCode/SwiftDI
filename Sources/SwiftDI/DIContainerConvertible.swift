@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DIContainerConvertible.swift
 //  
 //
 //  Created by v.a.prusakov on 27/06/2019.
