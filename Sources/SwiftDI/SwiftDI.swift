@@ -1,6 +1,12 @@
+import Foundation
 
-public class SwiftDI {
-    public static var sharedContainer: DIContainer = DIContainer()
+public enum SwiftDI {
+    internal private(set) static var sharedContainer: DIContainerConvertible = DIContainer()
+    
+    public static func useContainer(_ container: DIContainerConvertible) {
+        self.sharedContainer = container
+        container.didConnectToSwiftDI()
+    }
 }
 
 class LazyIniter {
@@ -21,86 +27,151 @@ public protocol DIPart {
     static func load(container: DIContainer)
 }
 
-class DIComponent {
-    lazy var registerContainers: [String: Any] = [:]
+class DIComponentManager {
     
-    func insert(_ object: Any, forKey key: String) {
-        self.registerContainers[key] = object
+    let locker = NSLock()
+    
+    lazy var registerContainers: [ObjectIdentifier: DIObject] = [:]
+    
+    func insert<T>(_ object: DIObject, forType type: T.Type) {
+        locker.sync { self.registerContainers[ObjectIdentifier(type)] = object }
     }
     
-    func insert<T>(_ object: Any, forType type: T.Type) {
-        let key = String(describing: type)
-        self.registerContainers[key] = object
+    subscript<T>(_ type: T.Type) -> DIObject? {
+        return locker.sync { self.registerContainers[ObjectIdentifier(type)] }
     }
     
-    subscript(_ key: String) -> Any? {
-        return registerContainers[key]
+    var objects: [DIObject] {
+        return locker.sync { self.registerContainers.values.flatMap{ $0 } }
     }
     
+}
+
+public enum DILifeCycle {
+    case singletone
+    case prototype
+}
+
+class DIObject: Hashable {
+    
+    let lazy: LazyIniter
+    let type: Any.Type
+    
+    var bundle: Bundle? {
+        if let anyClass = type as? AnyClass {
+            return Bundle(for: anyClass)
+        }
+        
+        return nil
+    }
+    
+    init(initier: LazyIniter, type: Any.Type) {
+        self.lazy = initer
+        self.type = type
+    }
+    
+    var lifeCycle: DILifeCycle = .prototype
 }
 
 public class DIComponentContext<T> {
     
-    private var components: DIComponent
-    private var lazyObject: LazyIniter
+    private var manager: DIComponentManager
+    private var object: DIObject
     
-    init(container: DIContainer, lazyObject: LazyIniter) {
-        self.components = container.components
-        self.lazyObject = lazyObject
-        self.components.insert(lazyObject, forType: T.self)
+    init(container: DIContainer, object: DIObject) {
+        self.manager = container.componentManager
+        self.object = object
+        self.manager.insert(object, forType: T.self)
+    }
+    
+    @discardableResult
+    public func lifeCycle(_ lifeCycle: DILifeCycle) -> DIComponentContext<T> {
+        self.object.lifeCycle = lifeCycle
+        return self
     }
     
     @discardableResult
     public func `as`<U>(_ type: U.Type) -> DIComponentContext<T> {
-        self.components.insert(self.lazyObject, forType: type)
+        self.manager.insert(self.object, forType: type)
         return self
     }
 }
 
-public class DIContainer: CustomStringConvertible {
+public class DIContainer: DIContainerConvertible, CustomStringConvertible {
     
     public var description: String {
-        return components.registerContainers.description
+        return componentManager.registerContainers.description
     }
     
-    lazy var components: DIComponent = DIComponent()
+    lazy var resolver: DIResolver = DIResolver(container: self)
     
-    public func loadPart(_ part: DIPart.Type) {
+    lazy var componentManager: DIComponentManager = DIComponentManager()
+    
+    public func appendPart(_ part: DIPart.Type) {
         part.load(container: self)
     }
     
     @discardableResult
     public func register<T>(_ initialize: @escaping () -> T) -> DIComponentContext<T> {
-        return DIComponentContext(container: self, lazyObject: LazyIniter(initBlock: initialize))
+        let initer = LazyIniter(initBlock: initialize)
+        return DIComponentContext(container: self, object: DIObject(initier: initer, type: T.self))
     }
     
-    public func resolve<T>() -> T {
-        let key = String(describing: T.self)
-        let container = components[key]
-        if let lazyObject = container as? LazyIniter {
-            return lazyObject.resolve()
-        } else {
-            return container as! T
-        }
+    public func resolve<T>(bundle: Bundle? = nil) -> T {
+        return resolver.resolve(bundle: bundle)
         
+    }
+    
+    public func didConnectToSwiftDI() {
+        self.resolveSingletones()
+    }
+    
+    // MARK: - Private
+    
+    func resolveSingletones() {
+        let objects = componentManager.objects.filter { $0.lifeCycle == .singletone }
+        for object in objects {
+            resolver.addSingletone(object)
+        }
     }
     
 }
 
-@propertyDelegate
-public struct Injectable<T> {
+class DIResolver {
     
-    public init() { }
+    var storage: [ObjectIdentifier: Any]
+    private unowned let container: DIContainer
     
-    private var _value: T?
+    init(container: DIContainer) {
+        self.container = container
+    }
     
-    public var value: T {
-        get {
-            return _value ?? SwiftDI.sharedContainer.resolve()
+    func addSingletone(_ object: DIObject) {
+        let resolvedObject = object.lazy.resolve() as Any
+        storage[ObjectIdentifier(object.type)] = resolvedObject
+    }
+    
+    func resolve<T>(bundle: Bundle? = nil) -> T {
+        let object = self.findObject(for: T.self, bundle: bundle)
+        
+        switch object.lifeCycle {
+        case .singletone:
+            return storage[ObjectIdentifier(object.type)] as! T
+        case .prototype:
+            return object.lazy.resolve()
+        }
+    }
+    
+    func findObject<T>(for type: T.Type, bundle: Bundle?) -> DIObject {
+        guard let object = self.container.componentManager[type] else {
+            fatalError("Can't found object for type \(type)")
+        }
+        if let bundle = bundle {
+            if object?.bundle != bundle {
+                fatalError("Bundles isn't equals")
+            }
         }
         
-        set {
-            _value = newValue
-        }
+        return object
     }
 }

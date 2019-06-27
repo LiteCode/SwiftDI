@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftDI",
+        "repositoryURL": "https://github.com/LiteCode/SwiftDI.git",
+        "state": {
+          "branch": "master",
+          "revision": "afc9740e815125ba9806f2aa0be49468f55b4d86",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
