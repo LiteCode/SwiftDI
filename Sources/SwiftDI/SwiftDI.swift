@@ -104,11 +104,10 @@ public class DIContainer: DIContainerConvertible, CustomStringConvertible {
     }
     
     var componentManager: DIComponentManager
-    var resolver: DIResolver
+    lazy var resolver: DIResolver = DIResolver(container: self)
     
     public init() {
         componentManager = DIComponentManager()
-        resolver = DIResolver(container: self)
     }
     
     public func appendPart(_ part: DIPart.Type) {
