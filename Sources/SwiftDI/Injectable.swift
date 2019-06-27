@@ -10,9 +10,15 @@ import Foundation
 /// Read only property wrapper.
 @propertyWrapper
 public struct Injectable<T> {
+    
+    var bundle: Bundle?
+    
+    public init() {
+        self.bundle = (T.self as? AnyClass).flatMap { Bundle(for: $0) }
+    }
+    
     public var value: T {
         get {
-            let bundle = (T.self as? AnyClass).flatMap { Bundle(for: $0) }
             return SwiftDI.sharedContainer.resolve(bundle: bundle)
         }
     }

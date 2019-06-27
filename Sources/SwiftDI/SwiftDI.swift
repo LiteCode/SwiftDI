@@ -42,7 +42,7 @@ class DIComponentManager {
     }
     
     var objects: [DIObject] {
-        return locker.sync { self.registerContainers.values.flatMap{ $0 } }
+        return locker.sync { self.registerContainers.values.compactMap{ $0 } }
     }
     
 }
@@ -52,7 +52,7 @@ public enum DILifeCycle {
     case prototype
 }
 
-class DIObject: Hashable {
+class DIObject {
     
     let lazy: LazyIniter
     let type: Any.Type
@@ -65,8 +65,8 @@ class DIObject: Hashable {
         return nil
     }
     
-    init(initier: LazyIniter, type: Any.Type) {
-        self.lazy = initer
+    init(lazy: LazyIniter, type: Any.Type) {
+        self.lazy = lazy
         self.type = type
     }
     
@@ -114,7 +114,7 @@ public class DIContainer: DIContainerConvertible, CustomStringConvertible {
     @discardableResult
     public func register<T>(_ initialize: @escaping () -> T) -> DIComponentContext<T> {
         let initer = LazyIniter(initBlock: initialize)
-        return DIComponentContext(container: self, object: DIObject(initier: initer, type: T.self))
+        return DIComponentContext(container: self, object: DIObject(lazy: initer, type: T.self))
     }
     
     public func resolve<T>(bundle: Bundle? = nil) -> T {
@@ -139,7 +139,7 @@ public class DIContainer: DIContainerConvertible, CustomStringConvertible {
 
 class DIResolver {
     
-    var storage: [ObjectIdentifier: Any]
+    lazy var storage: [ObjectIdentifier: Any] = [:]
     private unowned let container: DIContainer
     
     init(container: DIContainer) {
@@ -167,7 +167,7 @@ class DIResolver {
             fatalError("Can't found object for type \(type)")
         }
         if let bundle = bundle {
-            if object?.bundle != bundle {
+            if object.bundle != bundle {
                 fatalError("Bundles isn't equals")
             }
         }
