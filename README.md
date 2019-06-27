@@ -1,6 +1,9 @@
 # SwiftDI
+SwiftDI it's a tool for Dependency Injection using  `@propertyDelegate`. Right now SwiftDI is alpha version. **Be careful!**
 
-It's try to use `@propertyDelegate` for DI. Right now SwiftDI is early alpha version. **Be careful!**
+SwiftDI works with Swift 5.1 only and SwiftUI. 
+
+Please looks at our demo `SwiftDIDemo`!
 
 ## How it use?
 
@@ -36,14 +39,14 @@ container.register(MyService.init)
 ```swift
 
 let container = DIContainer()
-container.loadPart(MyAssembly.self)
+container.appendPart(MyAssembly.self)
 
 ```
 
 5) Set your container to `SwiftDI`:
 
 ```swift
-SwiftDI.sharedContainer = container
+SwiftDI.useContainer(container)
 ```
 
 6) Use your DI
@@ -56,8 +59,41 @@ class MyController: UIViewController {
 
 Does it! You're finish setup your DI container.
 
+## SwiftDI ❤️ SwiftUI!
+
+SwiftDI also supports `SwiftUI` framework. You can inject `BindableObject` and property automatically connect to view state.
+For this magic just use `@BindObjectInjectable`
+
+```swift
+struct ContentView: View {
+	
+	@BindObjectInjectable var viewModel: ContentViewModel
+
+	var body: some View {
+		HStack {
+			Text(viewModel.title)
+		}.onAppear { self.viewModel.getData() }
+	}
+}
+```
+
+## Scopes
+SwiftDI supports object scopes, you can use method `lifeCycle`
+
+```swift
+container.register(MyService.init)
+	.lifeCycle(.singletone)
+```
+
 ## How it works?
 
 SwiftDI using `@propertyDelegate` to use power of injection.
 `@Injectable` it's struct uses `SwiftDI.sharedContainer` for resolve objects when `value` is call. 
 
+## Needs more power?
+Just plugin other DI Framework and conform container to the protocol `DIContainerCombitable`
+
+## I don't test this:
+1. Dependency cycles
+2. Multi-bundle support
+3. In prod
