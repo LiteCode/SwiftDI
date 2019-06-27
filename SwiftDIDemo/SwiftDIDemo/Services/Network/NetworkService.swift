@@ -6,13 +6,37 @@
 //  Copyright © 2019 Vladislav Prusakov. All rights reserved.
 //
 
+import SwiftUI
 import Combine
-import Foundation
 
-class NetworkService: NetworkServiceInput {
+class NetworkService: BindableObject {
+    
+    var didChange = PassthroughSubject<Void, Never>()
+    
+    var hasData = false
     
     func getData() {
-        let publisher = URLSession.shared.dataTaskPublisher(for: URL(string: "")!)
+        let url = URL(string: "https://github.com")!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if data != nil {
+                DispatchQueue.main.async {
+                    self.hasData = true
+                    self.didChange.send(())
+                }
+            }
+            
+            if error != nil {
+                self.hasData = false
+            }
+        }
+        task.resume()
+    }
+    
+    func clearData() {
+        DispatchQueue.main.async {
+            self.hasData = false
+            self.didChange.send(())
+        }
         
     }
     

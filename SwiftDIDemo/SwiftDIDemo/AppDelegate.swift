@@ -9,14 +9,15 @@
 import UIKit
 import SwiftDI
 
+let container = DIContainer()
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        let container = DIContainer()
-        
-//        SwiftDI.useContainer(<#T##container: DIContainerConvertible##DIContainerConvertible#>)
+        container.appendPart(ServicesAssembly.self)
+        SwiftDI.useContainer(container)
         
         // Override point for customization after application launch.
         return true

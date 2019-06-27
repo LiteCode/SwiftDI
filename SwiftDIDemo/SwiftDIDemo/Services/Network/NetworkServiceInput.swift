@@ -6,8 +6,8 @@
 //  Copyright © 2019 Vladislav Prusakov. All rights reserved.
 //
 
-import Combine
+import SwiftUI
 
-protocol NetworkServiceInput {
+protocol NetworkServiceInput: BindableObject {
     func getData()
 }

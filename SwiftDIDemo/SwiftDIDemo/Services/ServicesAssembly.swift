@@ -12,6 +12,6 @@ class ServicesAssembly: DIPart {
     static func load(container: DIContainer) {
         container.register(NetworkService.init)
             .lifeCycle(.singletone)
-            .as(NetworkServiceInput.self)
+//            .as(NetworkServiceInput.self)
     }
 }
