@@ -7,13 +7,17 @@
 //
 
 import UIKit
+import SwiftDI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        let container = DIContainer()
+        
+//        SwiftDI.useContainer(<#T##container: DIContainerConvertible##DIContainerConvertible#>)
+        
         // Override point for customization after application launch.
         return true
     }

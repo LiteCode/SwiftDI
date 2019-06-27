@@ -13,7 +13,11 @@
 		CD3630E522C4E06600108376 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD3630E422C4E06600108376 /* Assets.xcassets */; };
 		CD3630E822C4E06600108376 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD3630E722C4E06600108376 /* Preview Assets.xcassets */; };
 		CD3630EB22C4E06600108376 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD3630E922C4E06600108376 /* LaunchScreen.storyboard */; };
+		CD546D5822C503AB00A5707D /* ServicesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD546D5722C503AB00A5707D /* ServicesAssembly.swift */; };
+		CD546D5B22C503D000A5707D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD546D5A22C503D000A5707D /* NetworkService.swift */; };
+		CD546D5D22C503DB00A5707D /* NetworkServiceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD546D5C22C503DB00A5707D /* NetworkServiceInput.swift */; };
 		CD8BBE0D22C5023A0082C255 /* SwiftDI in Frameworks */ = {isa = PBXBuildFile; productRef = CD8BBE0C22C5023A0082C255 /* SwiftDI */; };
+		CD8BBE1022C5033F0082C255 /* HomeAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8BBE0F22C5033F0082C255 /* HomeAssembly.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +29,10 @@
 		CD3630E722C4E06600108376 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CD3630EA22C4E06600108376 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD3630EC22C4E06600108376 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD546D5722C503AB00A5707D /* ServicesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesAssembly.swift; sourceTree = "<group>"; };
+		CD546D5A22C503D000A5707D /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		CD546D5C22C503DB00A5707D /* NetworkServiceInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceInput.swift; sourceTree = "<group>"; };
+		CD8BBE0F22C5033F0082C255 /* HomeAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAssembly.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,9 +66,10 @@
 		CD3630DD22C4E06400108376 /* SwiftDIDemo */ = {
 			isa = PBXGroup;
 			children = (
+				CD8BBE1322C503900082C255 /* Services */,
+				CD8BBE0E22C503240082C255 /* Home */,
 				CD3630DE22C4E06400108376 /* AppDelegate.swift */,
 				CD3630E022C4E06400108376 /* SceneDelegate.swift */,
-				CD3630E222C4E06400108376 /* ContentView.swift */,
 				CD3630E422C4E06600108376 /* Assets.xcassets */,
 				CD3630E922C4E06600108376 /* LaunchScreen.storyboard */,
 				CD3630EC22C4E06600108376 /* Info.plist */,
@@ -75,6 +84,49 @@
 				CD3630E722C4E06600108376 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		CD546D5922C503BA00A5707D /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				CD546D5A22C503D000A5707D /* NetworkService.swift */,
+				CD546D5C22C503DB00A5707D /* NetworkServiceInput.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		CD8BBE0E22C503240082C255 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				CD8BBE1222C503550082C255 /* View */,
+				CD8BBE1122C5034C0082C255 /* Assembly */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		CD8BBE1122C5034C0082C255 /* Assembly */ = {
+			isa = PBXGroup;
+			children = (
+				CD8BBE0F22C5033F0082C255 /* HomeAssembly.swift */,
+			);
+			path = Assembly;
+			sourceTree = "<group>";
+		};
+		CD8BBE1222C503550082C255 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CD3630E222C4E06400108376 /* ContentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CD8BBE1322C503900082C255 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CD546D5922C503BA00A5707D /* Network */,
+				CD546D5722C503AB00A5707D /* ServicesAssembly.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,7 +207,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD3630DF22C4E06400108376 /* AppDelegate.swift in Sources */,
+				CD546D5822C503AB00A5707D /* ServicesAssembly.swift in Sources */,
+				CD546D5D22C503DB00A5707D /* NetworkServiceInput.swift in Sources */,
 				CD3630E122C4E06400108376 /* SceneDelegate.swift in Sources */,
+				CD8BBE1022C5033F0082C255 /* HomeAssembly.swift in Sources */,
+				CD546D5B22C503D000A5707D /* NetworkService.swift in Sources */,
 				CD3630E322C4E06400108376 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

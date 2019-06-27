@@ -103,9 +103,13 @@ public class DIContainer: DIContainerConvertible, CustomStringConvertible {
         return componentManager.registerContainers.description
     }
     
-    lazy var resolver: DIResolver = DIResolver(container: self)
+    var componentManager: DIComponentManager
+    var resolver: DIResolver
     
-    lazy var componentManager: DIComponentManager = DIComponentManager()
+    public init() {
+        componentManager = DIComponentManager()
+        resolver = DIResolver(container: self)
+    }
     
     public func appendPart(_ part: DIPart.Type) {
         part.load(container: self)
