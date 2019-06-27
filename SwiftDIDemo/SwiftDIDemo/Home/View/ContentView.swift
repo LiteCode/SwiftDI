@@ -12,12 +12,11 @@ import SwiftDI
 struct ContentView : View {
     
     @BindObjectInjectable var networkService: NetworkService
-    @EnvironmentObject var networkService: NetworkService
     
     var body: some View {
         NavigationView {
             VStack(spacing: 8) {
-                Text(self.networkService.hasData ? "Has data" : "Hasn't data")
+                Text(self.networkService.hasData ? "Has data" : "No data")
                 Button(action: self.getData, label: { Text("Refresh") })
                 Button(action: self.clearData, label: { Text("ClearData") })
                 Spacer()
@@ -41,19 +40,3 @@ struct ContentView_Previews : PreviewProvider {
     }
 }
 #endif
-
-@propertyDelegate
-struct BindObjectInjectable<BindableObjectType>: DynamicViewProperty where BindableObjectType : BindableObject {
-    
-    var _value: BindableObjectType
-    var binding: ObjectBinding<BindableObjectType>
-    
-    init() {
-        _value = container.resolve()
-        self.binding = ObjectBinding<BindableObjectType>(initialValue: _value)
-    }
-    
-    var value: BindableObjectType {
-        get { return _value }
-    }
-}
