@@ -82,7 +82,7 @@ SwiftDI supports object scopes, you can use method `lifeCycle`
 
 ```swift
 container.register(MyService.init)
-	.lifeCycle(.singletone)
+	.lifeCycle(.single)
 ```
 
 ## How it works?
@@ -91,7 +91,7 @@ SwiftDI using `@propertyDelegate` to use power of injection.
 `@Injectable` it's struct uses `SwiftDI.sharedContainer` for resolve objects when `value` is call. 
 
 ## Needs more power?
-Just plugin other DI Framework and conform container to the protocol `DIContainerCombitable`
+Just plugin other DI Framework and conform container to the protocol `DIContainerConvertible`
 
 ## I don't test this:
 1. Dependency cycles

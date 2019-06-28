@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD26888422C5272E005430CC /* SwiftDI in Frameworks */ = {isa = PBXBuildFile; productRef = CD26888322C5272E005430CC /* SwiftDI */; };
+		CD26888A22C52C11005430CC /* SwiftDI in Frameworks */ = {isa = PBXBuildFile; productRef = CD26888922C52C11005430CC /* SwiftDI */; };
 		CD3630DF22C4E06400108376 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630DE22C4E06400108376 /* AppDelegate.swift */; };
 		CD3630E122C4E06400108376 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630E022C4E06400108376 /* SceneDelegate.swift */; };
 		CD3630E322C4E06400108376 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630E222C4E06400108376 /* ContentView.swift */; };
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD26888422C5272E005430CC /* SwiftDI in Frameworks */,
+				CD26888A22C52C11005430CC /* SwiftDI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,7 +154,7 @@
 			);
 			name = SwiftDIDemo;
 			packageProductDependencies = (
-				CD26888322C5272E005430CC /* SwiftDI */,
+				CD26888922C52C11005430CC /* SwiftDI */,
 			);
 			productName = SwiftDIDemo;
 			productReference = CD3630DB22C4E06400108376 /* SwiftDIDemo.app */;
@@ -185,7 +185,7 @@
 			);
 			mainGroup = CD3630D222C4E06300108376;
 			packageReferences = (
-				CD26888222C5272E005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */,
+				CD26888822C52C11005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */,
 			);
 			productRefGroup = CD3630DC22C4E06400108376 /* Products */;
 			projectDirPath = "";
@@ -414,7 +414,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CD26888222C5272E005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */ = {
+		CD26888822C52C11005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/LiteCode/SwiftDI.git";
 			requirement = {
@@ -425,9 +425,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CD26888322C5272E005430CC /* SwiftDI */ = {
+		CD26888922C52C11005430CC /* SwiftDI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CD26888222C5272E005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */;
+			package = CD26888822C52C11005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */;
 			productName = SwiftDI;
 		};
 /* End XCSwiftPackageProductDependency section */

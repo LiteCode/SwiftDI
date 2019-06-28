@@ -48,7 +48,7 @@ class DIComponentManager {
 }
 
 public enum DILifeCycle {
-    case singletone
+    case single
     case prototype
 }
 
