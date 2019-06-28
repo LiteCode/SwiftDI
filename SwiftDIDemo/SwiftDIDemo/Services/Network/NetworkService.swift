@@ -9,35 +9,18 @@
 import SwiftUI
 import Combine
 
-class NetworkService: BindableObject {
+class NetworkService : NetworkServiceInput {
     
-    var didChange = PassthroughSubject<Void, Never>()
-    
-    var hasData = false
-    
-    func getData() {
-        let url = URL(string: "https://github.com")!
+    func getData(block: @escaping (Data?) -> Void) {
+        let url = URL(string: "https://avatars3.githubusercontent.com/u/45299494?s=200&v=4")!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if data != nil {
+            if let data = data {
                 DispatchQueue.main.async {
-                    self.hasData = true
-                    self.didChange.send(())
+                    block(data)
                 }
-            }
-            
-            if error != nil {
-                self.hasData = false
             }
         }
         task.resume()
-    }
-    
-    func clearData() {
-        DispatchQueue.main.async {
-            self.hasData = false
-            self.didChange.send(())
-        }
-        
     }
     
 }

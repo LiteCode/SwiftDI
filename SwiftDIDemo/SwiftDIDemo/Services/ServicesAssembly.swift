@@ -11,7 +11,7 @@ import SwiftDI
 class ServicesAssembly: DIPart {
     static func load(container: DIContainer) {
         container.register(NetworkService.init)
-            .lifeCycle(.singletone)
+            .lifeCycle (.single)
             .as (NetworkServiceInput.self)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  HomeView.swift
 //  SwiftDIDemo
 //
 //  Created by v.a.prusakov on 27/06/2019.
@@ -9,34 +9,36 @@
 import SwiftUI
 import SwiftDI
 
-struct ContentView : View {
+struct HomeView : View {
     
-    @BindObjectInjectable var networkService: NetworkServiceInput
+    @BindObjectInjectable var viewModel: HomeViewModel
     
     var body: some View {
         NavigationView {
             VStack(spacing: 8) {
-                Text(self.networkService.hasData ? "Has data" : "No data")
+                Text(viewModel.hasData ? "Has data" : "No data").padding(.bottom, 8)
+                viewModel.image.flatMap { Image(uiImage: $0).padding(.bottom, 8) }
                 Button(action: self.getData, label: { Text("Refresh") })
                 Button(action: self.clearData, label: { Text("ClearData") })
                 Spacer()
-            }.navigationBarTitle(Text("SwiftDI Test"))
+            }.navigationBarTitle(Text("SwiftDI Test"), displayMode: .inline)
+                .padding()
         }.onAppear { self.getData() }
     }
     
     func getData() {
-        self.networkService.getData()
+        viewModel.getData()
     }
     
     func clearData() {
-        self.networkService.clearData()
+        viewModel.clearData()
     }
 }
 
 #if DEBUG
-struct ContentView_Previews : PreviewProvider {
+struct HomeView_Previews : PreviewProvider {
     static var previews: some View {
-        ContentView()
+        HomeView()
     }
 }
 #endif

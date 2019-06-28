@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD18D0E622C60567000D3EC3 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD18D0E522C60567000D3EC3 /* HomeViewModel.swift */; };
 		CD3630DF22C4E06400108376 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630DE22C4E06400108376 /* AppDelegate.swift */; };
 		CD3630E122C4E06400108376 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630E022C4E06400108376 /* SceneDelegate.swift */; };
-		CD3630E322C4E06400108376 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630E222C4E06400108376 /* ContentView.swift */; };
+		CD3630E322C4E06400108376 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630E222C4E06400108376 /* HomeView.swift */; };
 		CD3630E522C4E06600108376 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD3630E422C4E06600108376 /* Assets.xcassets */; };
 		CD3630E822C4E06600108376 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD3630E722C4E06600108376 /* Preview Assets.xcassets */; };
 		CD3630EB22C4E06600108376 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD3630E922C4E06600108376 /* LaunchScreen.storyboard */; };
@@ -21,10 +22,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CD18D0E522C60567000D3EC3 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		CD3630DB22C4E06400108376 /* SwiftDIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD3630DE22C4E06400108376 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD3630E022C4E06400108376 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CD3630E222C4E06400108376 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CD3630E222C4E06400108376 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		CD3630E422C4E06600108376 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD3630E722C4E06600108376 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CD3630EA22C4E06600108376 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +49,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CD18D0E422C60555000D3EC3 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CD18D0E522C60567000D3EC3 /* HomeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		CD3630D222C4E06300108376 = {
 			isa = PBXGroup;
 			children = (
@@ -98,8 +108,9 @@
 		CD8BBE0E22C503240082C255 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				CD8BBE1222C503550082C255 /* View */,
 				CD8BBE1122C5034C0082C255 /* Assembly */,
+				CD18D0E422C60555000D3EC3 /* ViewModel */,
+				CD8BBE1222C503550082C255 /* View */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -115,7 +126,7 @@
 		CD8BBE1222C503550082C255 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CD3630E222C4E06400108376 /* ContentView.swift */,
+				CD3630E222C4E06400108376 /* HomeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -206,13 +217,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD18D0E622C60567000D3EC3 /* HomeViewModel.swift in Sources */,
 				CD3630DF22C4E06400108376 /* AppDelegate.swift in Sources */,
 				CD546D5822C503AB00A5707D /* ServicesAssembly.swift in Sources */,
 				CD546D5D22C503DB00A5707D /* NetworkServiceInput.swift in Sources */,
 				CD3630E122C4E06400108376 /* SceneDelegate.swift in Sources */,
 				CD8BBE1022C5033F0082C255 /* HomeAssembly.swift in Sources */,
 				CD546D5B22C503D000A5707D /* NetworkService.swift in Sources */,
-				CD3630E322C4E06400108376 /* ContentView.swift in Sources */,
+				CD3630E322C4E06400108376 /* HomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

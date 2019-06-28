@@ -9,6 +9,5 @@
 import SwiftUI
 
 protocol NetworkServiceInput {
-    var hasData: Bool { get }
-    func getData()
+    func getData(block: @escaping (Data?) -> Void)
 }

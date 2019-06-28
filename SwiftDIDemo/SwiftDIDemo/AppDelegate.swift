@@ -14,11 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        // Create and init our container
         let container = DIContainer()
         container.appendPart(ServicesAssembly.self)
+        container.appendPart(HomeAssembly.self)
         SwiftDI.useContainer(container)
         
-        // Override point for customization after application launch.
         return true
     }
 

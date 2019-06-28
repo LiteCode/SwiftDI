@@ -8,8 +8,8 @@
 
 import SwiftDI
 
-class HomeAssembly: DIPart {
+class HomeAssembly : DIPart {
     static func load(container: DIContainer) {
-        
+        container.register(HomeViewModel.init)
     }
 }
