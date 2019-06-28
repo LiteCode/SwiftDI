@@ -18,16 +18,19 @@ public struct Injectable<T> {
     
     public init(cycle: Bool = false) {
         let bundle = (T.self as? AnyClass).flatMap { Bundle(for: $0) }
-        lazy = { SwiftDI.sharedContainer.resolve(bundle: bundle) }
+        let lazy: LazyInject = { SwiftDI.sharedContainer.resolve(bundle: bundle) }
         
-        if !cycle {
-            _value = lazy?()
+        if cycle {
+            self.lazy = lazy
+        } else {
+            _value = lazy()
         }
     }
     
     public init() {
         let bundle = (T.self as? AnyClass).flatMap { Bundle(for: $0) }
-        _value = SwiftDI.sharedContainer.resolve(bundle: bundle)
+        let value: T = SwiftDI.sharedContainer.resolve(bundle: bundle)
+        self._value = value
     }
     
     public var value: T {

@@ -15,7 +15,7 @@ protocol SessionServiceInput {
 }
 
 class SessionService : SessionServiceInput {
-    @Injectable var networkService: NetworkServiceInput
+//    @Injectable var networkService: NetworkServiceInput
 }
 
 class NetworkService : NetworkServiceInput {
