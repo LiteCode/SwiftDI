@@ -132,7 +132,7 @@ public class DIContainer: DIContainerConvertible, CustomStringConvertible {
     // MARK: - Private
     
     func resolveSingletones() {
-        let objects = componentManager.objects.filter { $0.lifeCycle == .singletone }
+        let objects = componentManager.objects.filter { $0.lifeCycle == .single }
         for object in objects {
             resolver.addSingletone(object)
         }
@@ -158,7 +158,7 @@ class DIResolver {
         let object = self.findObject(for: T.self, bundle: bundle)
         
         switch object.lifeCycle {
-        case .singletone:
+        case .single:
             return storage[ObjectIdentifier(object.type)] as! T
         case .prototype:
             return object.lazy.resolve()
