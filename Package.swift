@@ -20,7 +20,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SwiftDI",
-            dependencies: [], exclude: ["SwiftDIDemo"]),
+            dependencies: [], path: "Source"),
         .testTarget(
             name: "SwiftDITests",
             dependencies: ["SwiftDI"]),

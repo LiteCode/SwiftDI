@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD26888A22C52C11005430CC /* SwiftDI in Frameworks */ = {isa = PBXBuildFile; productRef = CD26888922C52C11005430CC /* SwiftDI */; };
 		CD3630DF22C4E06400108376 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630DE22C4E06400108376 /* AppDelegate.swift */; };
 		CD3630E122C4E06400108376 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630E022C4E06400108376 /* SceneDelegate.swift */; };
 		CD3630E322C4E06400108376 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3630E222C4E06400108376 /* ContentView.swift */; };
@@ -18,6 +17,7 @@
 		CD546D5B22C503D000A5707D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD546D5A22C503D000A5707D /* NetworkService.swift */; };
 		CD546D5D22C503DB00A5707D /* NetworkServiceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD546D5C22C503DB00A5707D /* NetworkServiceInput.swift */; };
 		CD8BBE1022C5033F0082C255 /* HomeAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8BBE0F22C5033F0082C255 /* HomeAssembly.swift */; };
+		CDA403A222C5F754001CC5F3 /* SwiftDI in Frameworks */ = {isa = PBXBuildFile; productRef = CDA403A122C5F754001CC5F3 /* SwiftDI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,20 +40,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD26888A22C52C11005430CC /* SwiftDI in Frameworks */,
+				CDA403A222C5F754001CC5F3 /* SwiftDI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		CD10132222C5241200E39652 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
 		CD3630D222C4E06300108376 = {
 			isa = PBXGroup;
 			children = (
@@ -105,7 +98,6 @@
 		CD8BBE0E22C503240082C255 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				CD10132222C5241200E39652 /* ViewModel */,
 				CD8BBE1222C503550082C255 /* View */,
 				CD8BBE1122C5034C0082C255 /* Assembly */,
 			);
@@ -154,7 +146,7 @@
 			);
 			name = SwiftDIDemo;
 			packageProductDependencies = (
-				CD26888922C52C11005430CC /* SwiftDI */,
+				CDA403A122C5F754001CC5F3 /* SwiftDI */,
 			);
 			productName = SwiftDIDemo;
 			productReference = CD3630DB22C4E06400108376 /* SwiftDIDemo.app */;
@@ -185,7 +177,7 @@
 			);
 			mainGroup = CD3630D222C4E06300108376;
 			packageReferences = (
-				CD26888822C52C11005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */,
+				CDA403A022C5F754001CC5F3 /* XCRemoteSwiftPackageReference "SwiftDI" */,
 			);
 			productRefGroup = CD3630DC22C4E06400108376 /* Products */;
 			projectDirPath = "";
@@ -414,7 +406,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CD26888822C52C11005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */ = {
+		CDA403A022C5F754001CC5F3 /* XCRemoteSwiftPackageReference "SwiftDI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/LiteCode/SwiftDI.git";
 			requirement = {
@@ -425,9 +417,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CD26888922C52C11005430CC /* SwiftDI */ = {
+		CDA403A122C5F754001CC5F3 /* SwiftDI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CD26888822C52C11005430CC /* XCRemoteSwiftPackageReference "SwiftDI" */;
+			package = CDA403A022C5F754001CC5F3 /* XCRemoteSwiftPackageReference "SwiftDI" */;
 			productName = SwiftDI;
 		};
 /* End XCSwiftPackageProductDependency section */
