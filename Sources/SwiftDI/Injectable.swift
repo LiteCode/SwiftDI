@@ -11,14 +11,28 @@ import Foundation
 @propertyDelegate
 public struct Injectable<T> {
     
-    var _value: T
+    typealias LazyInject = () -> T
     
-    public init() {
+    var _value: T?
+    var lazy: LazyInject
+    
+    public init(cycle: Bool = false) {
         let bundle = (T.self as? AnyClass).flatMap { Bundle(for: $0) }
-        _value = SwiftDI.sharedContainer.resolve(bundle: bundle)
+        lazy = { SwiftDI.sharedContainer.resolve(bundle: bundle) }
+        
+        if !cycle {
+            _value = lazy()
+        }
     }
     
     public var value: T {
-        get { return _value }
+        mutating get {
+            if let value = _value {
+                return value
+            } else {
+                self._value = lazy()
+                return _value!
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension NSLock {
+extension NSRecursiveLock {
     @discardableResult
     func sync<T>(_ block: () -> T) -> T {
         self.lock()

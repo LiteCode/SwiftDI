@@ -9,7 +9,7 @@ public enum SwiftDI {
     }
 }
 
-class LazyIniter {
+class Lazy {
     
     var initBlock: () -> Any
     
@@ -29,7 +29,7 @@ public protocol DIPart {
 
 class DIComponentManager {
     
-    let locker = NSLock()
+    let locker = NSRecursiveLock()
     
     lazy var registerContainers: [ObjectIdentifier: DIObject] = [:]
     
@@ -47,14 +47,23 @@ class DIComponentManager {
     
 }
 
+class Weak<T: AnyObject> {
+    weak var value: T?
+    
+    init(value: T) {
+        self.value = value
+    }
+}
+
 public enum DILifeCycle {
     case single
     case prototype
+    case weak
 }
 
 class DIObject {
     
-    let lazy: LazyIniter
+    let lazy: Lazy
     let type: Any.Type
     
     var bundle: Bundle? {
@@ -65,7 +74,7 @@ class DIObject {
         return nil
     }
     
-    init(lazy: LazyIniter, type: Any.Type) {
+    init(lazy: Lazy, type: Any.Type) {
         self.lazy = lazy
         self.type = type
     }
@@ -116,7 +125,7 @@ public class DIContainer: DIContainerConvertible, CustomStringConvertible {
     
     @discardableResult
     public func register<T>(_ initialize: @escaping () -> T) -> DIComponentContext<T> {
-        let initer = LazyIniter(initBlock: initialize)
+        let initer = Lazy(initBlock: initialize)
         return DIComponentContext(container: self, object: DIObject(lazy: initer, type: T.self))
     }
     
@@ -155,13 +164,23 @@ class DIResolver {
     }
     
     func resolve<T>(bundle: Bundle? = nil) -> T {
-        let object = self.findObject(for: T.self, bundle: bundle)
+        let object = findObject(for: T.self, bundle: bundle)
+        let key = ObjectIdentifier(object.type)
         
         switch object.lifeCycle {
         case .single:
-            return storage[ObjectIdentifier(object.type)] as! T
+            return storage[key] as! T
         case .prototype:
             return object.lazy.resolve()
+        case .weak:
+            if let weakReference = storage[key] as? Weak<AnyObject> {
+                return weakReference.value as! T
+            }
+            
+            let resolvedObject = object.lazy.resolve() as AnyObject
+            let weakObject = Weak(value: resolvedObject)
+            storage[key] = weakObject
+            return resolvedObject as! T
         }
     }
     
