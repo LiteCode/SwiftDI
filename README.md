@@ -62,12 +62,12 @@ Does it! You're finish setup your DI container.
 ## SwiftDI ❤️ SwiftUI!
 
 SwiftDI also supports `SwiftUI` framework. You can inject `BindableObject` and property automatically connect to view state.
-For this magic just use `@BindObjectInjectable`
+For this magic just use `@InjectableObjectBinding`
 
 ```swift
 struct ContentView: View {
 	
-	@BindObjectInjectable var viewModel: ContentViewModel
+	@InjectableObjectBinding var viewModel: ContentViewModel
 
 	var body: some View {
 		HStack {

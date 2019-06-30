@@ -1,5 +1,5 @@
 //
-//  BindObjectInjectable.swift
+//  InjectableObjectBinding.swift
 //  
 //
 //  Created by v.a.prusakov on 27/06/2019.
@@ -12,20 +12,19 @@ import SwiftUI
 /// Automaticly update the view when `BindableObjectType` changed.
 @available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 @propertyDelegate
-public struct BindObjectInjectable<BindableObjectType>: DynamicViewProperty where BindableObjectType : BindableObject {
+public struct InjectableObjectBinding<BindableObjectType>: DynamicViewProperty where BindableObjectType : BindableObject {
     
-    var _value: BindableObjectType
-    var binding: ObjectBinding<BindableObjectType>
+    var _value: ObjectBinding<BindableObjectType>
     
     public init() {
         let bundle = Bundle(for: BindableObjectType.self)
-        _value = SwiftDI.sharedContainer.resolve(bundle: bundle)
-        self.binding = ObjectBinding<BindableObjectType>(initialValue: _value)
-        self.delegateValue = binding.delegateValue
-        self.storageValue = binding.storageValue
+        let value: BindableObjectType = SwiftDI.sharedContainer.resolve(bundle: bundle)
+        _value = ObjectBinding<BindableObjectType>(initialValue: value)
+        self.delegateValue = _value.delegateValue
+        self.storageValue = _value.storageValue
     }
     
-    public var value: BindableObjectType {
+    public var value: ObjectBinding<BindableObjectType> {
         get { return _value }
     }
     

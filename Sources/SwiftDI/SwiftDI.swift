@@ -1,6 +1,11 @@
 import Foundation
 
 public enum SwiftDI {
+    
+    public enum Defaults {
+        public static var lifeCycle = DILifeCycle.prototype
+    }
+    
     internal private(set) static var sharedContainer: DIContainerConvertible = DIContainer()
     
     public static func useContainer(_ container: DIContainerConvertible) {
@@ -79,7 +84,7 @@ class DIObject {
         self.type = type
     }
     
-    var lifeCycle: DILifeCycle = .prototype
+    var lifeCycle: DILifeCycle = SwiftDI.Defaults.lifeCycle
 }
 
 public class DIComponentContext<T> {

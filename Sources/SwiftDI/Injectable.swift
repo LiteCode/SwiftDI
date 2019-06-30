@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 /// Read only property wrapper injector.
 @propertyDelegate
