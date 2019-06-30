@@ -11,7 +11,7 @@ import SwiftDI
 
 struct HomeView : View {
     
-    @BindObjectInjectable var viewModel: HomeViewModel
+    @InjectableObjectBinding var viewModel: HomeViewModel
     
     var body: some View {
         NavigationView {
