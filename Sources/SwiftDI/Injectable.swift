@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 /// Read only property wrapper injector.
+/// Injectable using lazy initialization, because instead cycle dependencies will crash in init.
 @propertyDelegate
 public struct Injectable<T> {
     
@@ -17,21 +18,10 @@ public struct Injectable<T> {
     var _value: T?
     var lazy: LazyInject?
     
-    public init(cycle: Bool = false) {
-        let bundle = (T.self as? AnyClass).flatMap { Bundle(for: $0) }
-        let lazy: LazyInject = { SwiftDI.sharedContainer.resolve(bundle: bundle) }
-        
-        if cycle {
-            self.lazy = lazy
-        } else {
-            _value = lazy()
-        }
-    }
-    
     public init() {
         let bundle = (T.self as? AnyClass).flatMap { Bundle(for: $0) }
-        let value: T = SwiftDI.sharedContainer.resolve(bundle: bundle)
-        self._value = value
+        let lazy: LazyInject = { SwiftDI.sharedContainer.resolve(bundle: bundle) }
+        self.lazy = lazy
     }
     
     public var value: T {
