@@ -11,10 +11,11 @@ import SwiftDI
 class ServicesAssembly: DIPart {
     static func load(container: DIContainer) {
         container.register(NetworkService.init)
-            .lifeCycle(.single)
+//            .lifeCycle(.single)
             .as (NetworkServiceInput.self)
         
         container.register(SessionService.init)
+//            .lifeCycle(.prototype)
             .as(SessionServiceInput.self)
     }
 }

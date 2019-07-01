@@ -24,32 +24,40 @@ class DIResolver {
     }
     
     func resolve<T>(bundle: Bundle? = nil) -> T {
-        let object = findObject(for: T.self, bundle: bundle)
+        return makeObject(for: T.self, bundle: bundle, usingObject: nil) as! T
+    }
+    
+    func makeObject(for type: Any.Type, bundle: Bundle?, usingObject: DIObject?) -> Any? {
+        let object = usingObject ?? findObject(for: type, bundle: bundle)
         let key = ObjectIdentifier(object.type)
         
         switch object.lifeCycle {
         case .single:
-            return storage[key] as! T
+            return storage[key]
         case .prototype:
             return object.lazy.resolve()
         case .weakSingle:
             if let weakReference = storage[key] as? Weak<AnyObject> {
-                return weakReference.value as! T
+                return weakReference.value
             }
             
             let resolvedObject = object.lazy.resolve() as AnyObject
             let weakObject = Weak(value: resolvedObject)
             storage[key] = weakObject
-            return resolvedObject as! T
+            return resolvedObject
         case .objectGraph:
-            if let object = objectGraphStorage[key] as? T {
+            
+            defer { objectGraphStackDepth -= 1 }
+            
+            if let object = objectGraphStorage[key] {
+                if objectGraphStackDepth == 0 {
+                    objectGraphStorage.removeAll()
+                }
                 return object
             }
             
             objectGraphStackDepth += 1
-            let value: T = object.lazy.resolve()
-            objectGraphStackDepth -= 1
-            
+            let value = object.lazy.resolve() as Any
             objectGraphStorage[key] = value
             
             let mirror = Mirror(reflecting: value)
@@ -59,14 +67,9 @@ class DIResolver {
                     let subject = findObject(for: injectable.type, bundle: injectable.bundle)
                     if subject.lifeCycle != .single && subject.lifeCycle != .weakSingle {
                         objectGraphStackDepth += 1
-                        objectGraphStorage[ObjectIdentifier(subject.type)] = subject.lazy.resolve()
-                        objectGraphStackDepth -= 1
+                        objectGraphStorage[ObjectIdentifier(subject.type)] = self.makeObject(for: subject.type, bundle: subject.bundle, usingObject: subject)
                     }
                 }
-            }
-            
-            if objectGraphStackDepth == 0 {
-                objectGraphStorage.removeAll()
             }
             
             return value

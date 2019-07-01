@@ -11,16 +11,21 @@ import SwiftDI
 import Combine
 
 protocol SessionServiceInput {
-    
+    func keka()
 }
 
 class SessionService : SessionServiceInput {
-    @Injectable var networkService: NetworkServiceInput
+    @Injectable var networkService: NetworkService
+    
+    func keka() {
+        print("keka")
+        networkService.lol()
+    }
 }
 
 class NetworkService : NetworkServiceInput {
     
-    @Injectable var sessionService: SessionServiceInput
+    @Injectable var sessionService: SessionService
     
     func getData(block: @escaping (Data?) -> Void) {
         let url = URL(string: "https://avatars3.githubusercontent.com/u/45299494?s=200&v=4")!
@@ -32,6 +37,11 @@ class NetworkService : NetworkServiceInput {
             }
         }
         task.resume()
+        sessionService.keka()
+    }
+    
+    func lol() {
+        print("lol")
     }
     
 }
