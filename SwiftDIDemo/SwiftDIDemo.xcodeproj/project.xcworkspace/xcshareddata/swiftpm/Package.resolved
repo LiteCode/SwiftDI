@@ -3,10 +3,10 @@
     "pins": [
       {
         "package": "SwiftDI",
-        "repositoryURL": "/Users/v.a.prusakov/Dev/MyProj/SwiftDI",
+        "repositoryURL": "https://github.com/LiteCode/SwiftDI.git",
         "state": {
           "branch": "master",
-          "revision": "a5fdd6fa4ec9388c0d5efe39e95d3ec7c972c8df",
+          "revision": "be40262f2017001e5094fa37ebd28dc1f8448cb7",
           "version": null
         }
       }
