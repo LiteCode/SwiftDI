@@ -85,6 +85,8 @@ container.register(MyService.init)
 	.lifeCycle(.single)
 ```
 
+By default life time for instance is `objectGraph`.  `objectGraph` using `Mirror` for get info about nested injectables property and it can be slowly.
+
 ## How it works?
 
 SwiftDI using `@propertyDelegate` to use power of injection.
