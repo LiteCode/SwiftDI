@@ -14,18 +14,18 @@ import SwiftUI
 @propertyDelegate
 public struct InjectableObjectBinding<BindableObjectType>: DynamicViewProperty where BindableObjectType : BindableObject {
     
-    var _value: ObjectBinding<BindableObjectType>
+    var _bindingValue: ObjectBinding<BindableObjectType>
     
     public init() {
         let bundle = Bundle(for: BindableObjectType.self)
         let value: BindableObjectType = SwiftDI.sharedContainer.resolve(bundle: bundle)
-        _value = ObjectBinding<BindableObjectType>(initialValue: value)
-        self.delegateValue = _value.delegateValue
-        self.storageValue = _value.storageValue
+        _bindingValue = ObjectBinding<BindableObjectType>(initialValue: value)
+        self.delegateValue = _bindingValue.delegateValue
+        self.storageValue = _bindingValue.storageValue
     }
     
     public var value: ObjectBinding<BindableObjectType> {
-        get { return _value }
+        get { return _bindingValue.value }
     }
     
     public private(set) var delegateValue: ObjectBinding<BindableObjectType>.Wrapper
