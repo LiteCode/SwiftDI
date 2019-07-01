@@ -24,7 +24,7 @@ public struct InjectableObjectBinding<BindableObjectType>: DynamicViewProperty w
         self.storageValue = _bindingValue.storageValue
     }
     
-    public var value: ObjectBinding<BindableObjectType> {
+    public var value: BindableObjectType {
         get { return _bindingValue.value }
     }
     
