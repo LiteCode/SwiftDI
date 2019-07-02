@@ -94,8 +94,3 @@ SwiftDI using `@propertyDelegate` to use power of injection.
 
 ## Needs more power?
 Just plugin other DI Framework and conform container to the protocol `DIContainerConvertible`
-
-## I don't test this:
-1. Dependency cycles
-2. Multi-bundle support
-3. In prod
