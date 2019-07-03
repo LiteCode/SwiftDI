@@ -10,7 +10,7 @@ import Combine
 
 /// Read only property wrapper injector.
 /// Injectable using lazy initialization, because instead cycle dependencies will crash in init.
-@propertyDelegate
+@propertyWrapper
 public struct Injectable<T> {
     
     typealias LazyInject = () -> T
@@ -24,7 +24,7 @@ public struct Injectable<T> {
         self.lazy = lazy
     }
     
-    public var value: T {
+    public var wrappedValue: T {
         mutating get {
             if let value = _value {
                 return value
