@@ -1,6 +1,0 @@
-framework module Pods_SwiftDIDemo {
-  umbrella header "Pods-SwiftDIDemo-umbrella.h"
-
-  export *
-  module * { export * }
-}
