@@ -11,11 +11,11 @@ import SwiftDI         // You know it
 import SwiftUI         // For BindableObject
 import Combine         // For PassthroughSubject
 
-class HomeViewModel : BindableObject {
+class HomeViewModel : ObservableObject {
     
     @Injectable var networkService: NetworkServiceInput
     
-    var didChange = PassthroughSubject<Void, Never>()
+    var objectWillChange = PassthroughSubject<Void, Never>()
     
     private(set) var image: UIImage?
     var hasData: Bool {
@@ -29,7 +29,7 @@ class HomeViewModel : BindableObject {
                 let image = UIImage(data: data)
                 DispatchQueue.main.async {
                     self.image = image
-                    self.didChange.send()
+                    self.objectWillChange.send()
                 }
             }
         }
@@ -37,7 +37,7 @@ class HomeViewModel : BindableObject {
     
     func clearData() {
         self.image = nil
-        self.didChange.send()
+        self.objectWillChange.send()
     }
     
 }

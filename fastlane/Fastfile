@@ -1,0 +1,44 @@
+podspec_file_name = "SwiftDI.podspec"
+
+lane :publish_pod do |options|
+
+  bump_type = "patch"
+  if options.key?(:release_type)
+    puts("options detected")
+    bump_type = options[:release_type]
+  end
+                                                                                                                  
+  sh("git fetch --tags")
+
+  pod_lib_lint(
+    allow_warnings: true
+  )
+
+  version = version_bump_podspec(
+    path: podspec_file_name,
+    bump_type: bump_type
+  )
+
+  git_commit(
+    path: ["./#{podspec_file_name}"],
+    message: "Update spec to version #{version}"
+  )
+
+  add_git_tag(
+    tag: version,
+    message: "Version #{version}"
+  )
+
+  push_to_git_remote(
+    remote_branch: git_branch(),
+    force: false,
+    tags: true
+  )
+
+  pod_push(
+    path: podspec_file_name,
+    allow_warnings: true,
+    verbose: false
+  )
+
+end

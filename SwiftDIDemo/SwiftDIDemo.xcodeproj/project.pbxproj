@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,10 +18,13 @@
 		CD546D5B22C503D000A5707D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD546D5A22C503D000A5707D /* NetworkService.swift */; };
 		CD546D5D22C503DB00A5707D /* NetworkServiceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD546D5C22C503DB00A5707D /* NetworkServiceInput.swift */; };
 		CD8BBE1022C5033F0082C255 /* HomeAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8BBE0F22C5033F0082C255 /* HomeAssembly.swift */; };
-		CDAE5BA322CA4FDF008D546B /* SwiftDI in Frameworks */ = {isa = PBXBuildFile; productRef = CDAE5BA222CA4FDF008D546B /* SwiftDI */; };
+		CE2CB7CE597C2E764C0048C3 /* Pods_SwiftDIDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3A153B44536651BCFFCE9 /* Pods_SwiftDIDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4CA46C2BC2BA4600E1B09431 /* Pods-SwiftDIDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftDIDemo.debug.xcconfig"; path = "Target Support Files/Pods-SwiftDIDemo/Pods-SwiftDIDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		4CF3A153B44536651BCFFCE9 /* Pods_SwiftDIDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftDIDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD086B94A320D8607F6BD080 /* Pods-SwiftDIDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftDIDemo.release.xcconfig"; path = "Target Support Files/Pods-SwiftDIDemo/Pods-SwiftDIDemo.release.xcconfig"; sourceTree = "<group>"; };
 		CD18D0E522C60567000D3EC3 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		CD22D06322CA26AE00793804 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		CD3630DB22C4E06400108376 /* SwiftDIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftDIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,13 +46,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDAE5BA322CA4FDF008D546B /* SwiftDI in Frameworks */,
+				CE2CB7CE597C2E764C0048C3 /* Pods_SwiftDIDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		46D0032E20577A474144597C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4CA46C2BC2BA4600E1B09431 /* Pods-SwiftDIDemo.debug.xcconfig */,
+				AD086B94A320D8607F6BD080 /* Pods-SwiftDIDemo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		CD18D0E422C60555000D3EC3 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				CD22D06322CA26AE00793804 /* Package.swift */,
+				4CF3A153B44536651BCFFCE9 /* Pods_SwiftDIDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -72,6 +85,7 @@
 				CD3630DD22C4E06400108376 /* SwiftDIDemo */,
 				CD3630DC22C4E06400108376 /* Products */,
 				CD22D06222CA26AE00793804 /* Frameworks */,
+				46D0032E20577A474144597C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -157,9 +171,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CD3630EF22C4E06600108376 /* Build configuration list for PBXNativeTarget "SwiftDIDemo" */;
 			buildPhases = (
+				3E2F05544119409BBEB88A7D /* [CP] Check Pods Manifest.lock */,
 				CD3630D722C4E06400108376 /* Sources */,
 				CD3630D822C4E06400108376 /* Frameworks */,
 				CD3630D922C4E06400108376 /* Resources */,
+				64940B207F60FF1A2D2FB118 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -167,7 +183,6 @@
 			);
 			name = SwiftDIDemo;
 			packageProductDependencies = (
-				CDAE5BA222CA4FDF008D546B /* SwiftDI */,
 			);
 			productName = SwiftDIDemo;
 			productReference = CD3630DB22C4E06400108376 /* SwiftDIDemo.app */;
@@ -198,7 +213,6 @@
 			);
 			mainGroup = CD3630D222C4E06300108376;
 			packageReferences = (
-				CDAE5BA122CA4FDF008D546B /* XCRemoteSwiftPackageReference "SwiftDI" */,
 			);
 			productRefGroup = CD3630DC22C4E06400108376 /* Products */;
 			projectDirPath = "";
@@ -221,6 +235,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3E2F05544119409BBEB88A7D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftDIDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		64940B207F60FF1A2D2FB118 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftDIDemo/Pods-SwiftDIDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftDIDemo/Pods-SwiftDIDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftDIDemo/Pods-SwiftDIDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CD3630D722C4E06400108376 /* Sources */ = {
@@ -368,12 +424,14 @@
 		};
 		CD3630F022C4E06600108376 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4CA46C2BC2BA4600E1B09431 /* Pods-SwiftDIDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "SwiftDIDemo/Preview\\ Content";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SwiftDIDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -387,12 +445,14 @@
 		};
 		CD3630F122C4E06600108376 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AD086B94A320D8607F6BD080 /* Pods-SwiftDIDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "SwiftDIDemo/Preview\\ Content";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SwiftDIDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -426,25 +486,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		CDAE5BA122CA4FDF008D546B /* XCRemoteSwiftPackageReference "SwiftDI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/LiteCode/SwiftDI.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		CDAE5BA222CA4FDF008D546B /* SwiftDI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CDAE5BA122CA4FDF008D546B /* XCRemoteSwiftPackageReference "SwiftDI" */;
-			productName = SwiftDI;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CD3630D322C4E06300108376 /* Project object */;
 }
