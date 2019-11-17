@@ -8,11 +8,11 @@ public enum SwiftDI {
         public static var lifeCycle = DILifeCycle.objectGraph
     }
     
-    internal private(set) static var sharedContainer: DIContainerConvertible = DIContainer()
+    internal private(set) static var sharedContainer: DIContainer = DIContainer()
     
     /// Use container for inject dependencies using `@Injectable` and `@InjecatableObjectBinding`.
     /// Call method `didConnectToSwiftDI` when container passed to method. Initialize your singletons here.
-    public static func useContainer(_ container: DIContainerConvertible) {
+    public static func useContainer(_ container: DIContainer) {
         self.sharedContainer = container
         container.didConnectToSwiftDI()
     }

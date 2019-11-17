@@ -11,18 +11,27 @@ import SwiftDI
 
 struct HomeView : View {
     
-    @InjectableObjectBinding var viewModel: HomeViewModel
+    @EnvironmentObservedInject var viewModel: HomeViewModel
     
     var body: some View {
         NavigationView {
             VStack(spacing: 8) {
                 Text(viewModel.hasData ? "Has data" : "No data").padding(.bottom, 8)
-                viewModel.image.flatMap { Image(uiImage: $0).padding(.bottom, 8) }
-                Button(action: self.getData, label: { Text("Refresh") })
-                Button(action: self.clearData, label: { Text("ClearData") })
+                
+                imageData
+                    .padding(.bottom, 8)
+                
+                HStack {
+                    Spacer()
+                    Button(action: self.getData, label: { makeButtonContent("Refresh") })
+                    Spacer()
+                    Button(action: self.clearData, label: { makeButtonContent("Clear Data") })
+                    Spacer()
+                }
                 Spacer()
-            }.navigationBarTitle(Text("SwiftDI Test"), displayMode: .inline)
-                .padding()
+            }
+            .navigationBarTitle("SwiftDI Test", displayMode: .inline)
+            .padding()
         }.onAppear { self.getData() }
     }
     
@@ -32,6 +41,39 @@ struct HomeView : View {
     
     func clearData() {
         viewModel.clearData()
+    }
+    
+    private var imageData: some View {
+        HStack {
+            if viewModel.hasData {
+                Image(uiImage: viewModel.image!)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 150, height: 150)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            } else {
+                Rectangle()
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .foregroundColor(.clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.black, lineWidth: 1)
+                )
+                    .frame(width: 150, height: 150)
+            }
+        }
+    }
+    
+    private func makeButtonContent(_ text: String) -> some View {
+        HStack {
+            Spacer()
+            Text(text)
+            Spacer()
+        }
+        .frame(height: 32)
+        .background(Color(.systemBlue))
+        .foregroundColor(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
 

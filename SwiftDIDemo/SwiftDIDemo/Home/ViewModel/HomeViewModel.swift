@@ -13,11 +13,10 @@ import Combine         // For PassthroughSubject
 
 class HomeViewModel : ObservableObject {
     
-    @Injectable var networkService: NetworkServiceInput
+    @Inject var networkService: NetworkServiceInput
     
-    var objectWillChange = PassthroughSubject<Void, Never>()
+    @Published private(set) var image: UIImage?
     
-    private(set) var image: UIImage?
     var hasData: Bool {
         return self.image != nil
     }
@@ -29,7 +28,6 @@ class HomeViewModel : ObservableObject {
                 let image = UIImage(data: data)
                 DispatchQueue.main.async {
                     self.image = image
-                    self.objectWillChange.send()
                 }
             }
         }
@@ -37,7 +35,6 @@ class HomeViewModel : ObservableObject {
     
     func clearData() {
         self.image = nil
-        self.objectWillChange.send()
     }
     
 }

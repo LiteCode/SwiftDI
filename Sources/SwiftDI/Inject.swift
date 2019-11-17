@@ -8,23 +8,27 @@
 import Foundation
 import Combine
 
+@available(*, deprecated, renamed: "Inject")
+public typealias Injectable = Inject
+
 /// Read only property wrapper injector.
-/// Injectable using lazy initialization, because instead cycle dependencies will crash in init.
+
 @propertyWrapper
-public struct Injectable<T> {
+public struct Inject<Value> {
     
-    typealias LazyInject = () -> T
+    // Injectable using lazy initialization, because instead cycle dependencies will crash in init.
+    typealias LazyInject = () -> Value
     
-    var _value: T?
+    var _value: Value?
     var lazy: LazyInject?
     
     public init() {
-        let bundle = (T.self as? AnyClass).flatMap { Bundle(for: $0) }
+        let bundle = (Value.self as? AnyClass).flatMap { Bundle(for: $0) }
         let lazy: LazyInject = { SwiftDI.sharedContainer.resolve(bundle: bundle) }
         self.lazy = lazy
     }
     
-    public var wrappedValue: T {
+    public var wrappedValue: Value {
         mutating get {
             if let value = _value {
                 return value

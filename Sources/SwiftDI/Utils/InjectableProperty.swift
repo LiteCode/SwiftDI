@@ -18,15 +18,26 @@ extension InjectableProperty {
     }
 }
 
-extension Injectable: InjectableProperty {
+extension Inject: InjectableProperty {
     var type: Any.Type {
-        return T.self
+        return Value.self
+    }
+}
+
+#if canImport(SwiftUI)
+
+@available(iOS 13.0, *)
+extension EnvironmentInject: InjectableProperty {
+    var type: Any.Type {
+        return Value.self
     }
 }
 
 @available(iOS 13.0, *)
-extension InjectableObjectBinding: InjectableProperty {
+extension EnvironmentObservedInject: InjectableProperty {
     var type: Any.Type {
-        return BindableObjectType.self
+        return Value.self
     }
 }
+
+#endif

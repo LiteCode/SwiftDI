@@ -11,5 +11,6 @@ import SwiftDI
 class HomeAssembly : DIPart {
     static func load(container: DIContainer) {
         container.register(HomeViewModel.init)
+            .lifeCycle(.prototype)
     }
 }

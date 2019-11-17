@@ -1,13 +1,13 @@
 //
 //  DIContainer.swift
-//  
+//  SwiftDI
 //
 //  Created by v.a.prusakov on 01/07/2019.
 //
 
 import Foundation
 
-public class DIContainer: DIContainerConvertible, CustomStringConvertible {
+public final class DIContainer: CustomStringConvertible {
     
     public var description: String {
         return componentManager.registerContainers.description

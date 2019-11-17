@@ -1,6 +1,6 @@
 //
 //  DIComponentContext.swift
-//  
+//  SwiftDI
 //
 //  Created by v.a.prusakov on 01/07/2019.
 //

@@ -1,5 +1,5 @@
 # SwiftDI
-SwiftDI it's a tool for Dependency Injection using  `@propertyDelegate`. Right now SwiftDI is alpha version. **Be careful!**
+SwiftDI it's a tool for Dependency Injection using  `@propertyWrapper`. Right now SwiftDI is alpha version. **Be careful!**
 
 SwiftDI works with Swift 5.1 only and SwiftUI. 
 
@@ -61,13 +61,14 @@ Does it! You're finish setup your DI container.
 
 ## SwiftDI ❤️ SwiftUI!
 
-SwiftDI also supports `SwiftUI` framework. You can inject `BindableObject` and property automatically connect to view state.
-For this magic just use `@InjectableObjectBinding`
+SwiftDI also supports `SwiftUI` framework. 
+You can inject your `BindableObject` and property automatically connect to view state.
+For this magic just use `@EnvironmentObservedInject`
 
 ```swift
 struct ContentView: View {
 	
-	@InjectableObjectBinding var viewModel: ContentViewModel
+	@EnvironmentObservedInject var viewModel: ContentViewModel
 
 	var body: some View {
 		HStack {
@@ -75,6 +76,42 @@ struct ContentView: View {
 		}.onAppear { self.viewModel.getData() }
 	}
 }
+```
+
+For non-mutating view object use `@EnvironmentInject`:
+
+```swift
+struct ContentView: View {
+	
+	@EnvironmentInject var authService: AuthorizationService
+
+	var body: some View {
+		HStack {
+			Text("Waiting...")
+		}.onAppear { self.authService.auth() }
+	}
+}
+```
+
+By default SwiftDI using shared container, but if you wanna pass custom container to view using method `inject(container:)` for view:
+```swift
+let container = DIContainer()
+
+let view = HomeView().inject(container: container)
+```
+
+Or if you wanna add some method to container using method `environmentInject`:
+
+```swift
+
+// SceneDelegate.swift
+
+let window = UIWindow(windowScene: windowScene)
+let authService = AuthorizationService(window: window)
+
+let view = HomeView().environmentInject(authService)
+
+// etc
 ```
 
 ## Scopes
