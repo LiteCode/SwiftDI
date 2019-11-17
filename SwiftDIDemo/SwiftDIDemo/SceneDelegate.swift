@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             
-            let view = HomeView().environmentInject(<#T##value: Value##Value#>)
+            let view = HomeView()
             window.rootViewController = UIHostingController(rootView: view)
             self.window = window
             window.makeKeyAndVisible()
