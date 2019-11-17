@@ -8,6 +8,7 @@
 #if canImport(SwiftUI)
 import SwiftUI
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension View {
     
     /// Set dependency container to view
@@ -23,10 +24,12 @@ public extension View {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct DIContainerEnvironmentKey: EnvironmentKey {
     static var defaultValue: DIContainer = SwiftDI.sharedContainer
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 extension EnvironmentValues {
     var container: DIContainer {
         get { self[DIContainerEnvironmentKey.self] }
