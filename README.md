@@ -53,7 +53,7 @@ SwiftDI.useContainer(container)
 
 ```swift 
 class MyController: UIViewController {
-    @Injectable var service: MyServiceInput
+    @Inject var service: MyServiceInput
 }
 ```
 
@@ -126,8 +126,5 @@ By default life time for instance is `objectGraph`.  `objectGraph` using `Mirror
 
 ## How it works?
 
-SwiftDI using `@propertyDelegate` to use power of injection.
-`@Injectable` it's struct uses `SwiftDI.sharedContainer` for resolve objects when `value` is call. 
-
-## Needs more power?
-Just plugin other DI Framework and conform container to the protocol `DIContainerConvertible`
+SwiftDI using `@propertyWrapper` to use power of injection.
+`@Inject` it's struct uses `SwiftDI.sharedContainer` for resolve objects when `value` is call. 
