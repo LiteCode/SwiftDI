@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
     s.source           = { :git => 'https://github.com/LiteCode/SwiftDI.git', :tag => s.version.to_s }
   
     s.ios.deployment_target = '13.0'
+    s.macos.deployment_target = '10.15'
     s.swift_version = '5.1'
     s.source_files = 'Sources/SwiftDI/**/*.{swift}'
 

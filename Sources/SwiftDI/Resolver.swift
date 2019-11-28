@@ -24,7 +24,11 @@ class DIResolver {
     }
     
     func resolve<T>(bundle: Bundle? = nil) -> T {
-        return makeObject(for: T.self, bundle: bundle, usingObject: nil) as! T
+        if let object = makeObject(for: T.self, bundle: bundle, usingObject: nil) {
+            return object as! T
+        } else {
+            fatalError("Couldn't found object for type \(T.self)")
+        }
     }
     
     func makeObject(for type: Any.Type, bundle: Bundle?, usingObject: DIObject?) -> Any? {

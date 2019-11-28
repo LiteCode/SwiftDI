@@ -31,3 +31,14 @@ public enum DILifeCycle {
     /// Dependency instance is created one per object graph.
     case objectGraph
 }
+
+extension DILifeCycle: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch self {
+        case .single: return "single"
+        case .prototype: return "protorype"
+        case .weakSingle: return "weakSingle"
+        case .objectGraph: return "objectGraph"
+        }
+    }
+}

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DIObject {
+class DIObject: CustomDebugStringConvertible {
     
     let lazy: Lazy
     let type: Any.Type
@@ -26,4 +26,10 @@ class DIObject {
     }
     
     var lifeCycle: DILifeCycle = SwiftDI.Defaults.lifeCycle
+    
+    var debugDescription: String {
+        let address = Unmanaged.passUnretained(self).toOpaque()
+        let type = String(describing: self.type)
+        return String(format: "[DIObject <%@>] %@ - %@", address.debugDescription, type, self.lifeCycle.debugDescription)
+    }
 }
