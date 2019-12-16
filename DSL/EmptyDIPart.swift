@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct EmptyDI: DIPart {
+public struct EmptyDIPart: DIPart {
     public typealias Body = Never
     
     public var body: Never { fatalError() }
 }
 
-extension EmptyDI: DIPartBuildable {
+extension EmptyDIPart: DIPartBuildable {
     func build(container: DIContainer) { }
 }

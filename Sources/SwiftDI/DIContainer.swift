@@ -29,6 +29,10 @@ public final class DIContainer: CustomStringConvertible {
         part.load(container: self)
     }
     
+    public func appendPart<Content: DIPart>(_ part: Content) {
+        part.build(container: self)
+    }
+    
     @discardableResult
     public func register<T>(_ initialize: @escaping () -> T) -> DIComponentContext<T> {
         let initer = Lazy(initBlock: initialize)

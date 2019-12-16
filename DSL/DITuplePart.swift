@@ -1,5 +1,5 @@
 //
-//  DIObjectGroup.swift
+//  DITuplePart.swift
 //  SwiftDI
 //
 //  Created by Vladislav Prusakov on 16.12.2019.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DIObjectGroup<T>: DIPart {
+public struct DITuplePart<T>: DIPart {
     public typealias Body = Never
     
     public var body: Never { fatalError() }
@@ -19,7 +19,7 @@ public struct DIObjectGroup<T>: DIPart {
     }
 }
 
-extension DIObjectGroup: DIPartBuildable {
+extension DITuplePart: DIPartBuildable {
     func build(container: DIContainer) {
         for child in Mirror(reflecting: objects).children {
             if let buildable = child.value as? DIPartBuildable {
