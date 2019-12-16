@@ -14,10 +14,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        
         // Create and init our container
-        let container = DIContainer()
-        container.appendPart(ServicesAssembly.self)
-        container.appendPart(HomeAssembly.self)
+        let container = DIContainer(part:
+            DIGroup {
+                ServicesAssembly()
+                HomeAssembly()
+            }
+        )
+        
         SwiftDI.useContainer(container)
         
         return true
