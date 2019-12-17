@@ -87,10 +87,6 @@ DIGroup {
 }
 ```
 
-also contains method `lifeCycle()`
-`lifeCycle()` applies to all objects in group 
-
-
 2) DIRegister - Register some object
 ```swift
 DIRegister(MyService.init)

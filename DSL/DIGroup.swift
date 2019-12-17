@@ -18,15 +18,4 @@ public struct DIGroup<Part: DIPart>: DIPart {
     public init(@DIBuilder objects: () -> Part) {
         self.objects = objects()
     }
-    
-    public func lifeCycle(_ value: DILifeCycle) -> some DIPart {
-        _ = objects.lifeCycle(value)
-        return self
-    }
-}
-
-extension DIGroup {
-    func build(container: DIContainer) {
-        objects.build(container: container)
-    }
 }

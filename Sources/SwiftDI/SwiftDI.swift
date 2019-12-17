@@ -10,8 +10,7 @@ public enum SwiftDI {
     
     internal private(set) static var sharedContainer: DIContainer = DIContainer()
     
-    /// Use container for inject dependencies using `@Injectable` and `@InjecatableObjectBinding`.
-    /// Call method `didConnectToSwiftDI` when container passed to method. Initialize your singletons here.
+    /// Use container for inject dependencies.
     public static func useContainer(_ container: DIContainer) {
         self.sharedContainer = container
         container.didConnectToSwiftDI()
