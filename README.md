@@ -17,29 +17,47 @@ let container = DIContainer()
 
 ```swift
 class MyAssembly: DIPart {
-    static func load(container: DIContainer)
+    var body: some DIPart {
+        // Some Assembly parts place here
+    }
 }
 ```
 
 3) Register your objects:
 
 ```swift
-container.register(MyService.init)
+class MyAssembly: DIPart {
+    var body: some DIPart {
+        DIRegister(MyService.init)
+    }
+}
 ```
 
 you can use `as<T>(_ type: T.Type)` for set a new injection identifier:
 
 ```swift
-container.register(MyService.init)
-    .as (MyServiceInput.self)
+class MyAssembly: DIPart {
+    var body: some DIPart {
+        DIRegister(MyService.init)
+            .as (MyServiceInput.self)
+    }
+}
 ```
 
 4) Load your `DIPart` to the container:
 
 ```swift
 
+let container = DIContainer(part: MyAssembly())
+
+```
+
+or 
+
+```swift
+
 let container = DIContainer()
-container.appendPart(MyAssembly.self)
+container.appendPart(MyAssembly())
 
 ```
 
@@ -53,11 +71,28 @@ SwiftDI.useContainer(container)
 
 ```swift 
 class MyController: UIViewController {
-    @Inject var service: MyServiceInput
+    @Injected var service: MyServiceInput
 }
 ```
 
 Does it! You're finish setup your DI container.
+
+## DSL
+
+1) DIGroup - Contains one or many `DIPart`s
+
+```swift
+DIGroup {
+    // Place you DIParts here
+}
+```
+
+2) DIRegister - Register some object
+```swift
+DIRegister(MyService.init)
+```
+
+also contains methods `lifeCycle()` and `as()`
 
 ## SwiftDI ❤️ SwiftUI!
 
@@ -118,7 +153,7 @@ let view = HomeView().environmentInject(authService)
 SwiftDI supports object scopes, you can use method `lifeCycle`
 
 ```swift
-container.register(MyService.init)
+DIRegister(MyService.init)
 	.lifeCycle(.single)
 ```
 

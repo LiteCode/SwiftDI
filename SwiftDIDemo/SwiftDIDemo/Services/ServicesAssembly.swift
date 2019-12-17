@@ -8,9 +8,10 @@
 
 import SwiftDI
 
-class ServicesAssembly: DIPart {
-    static func load(container: DIContainer) {
-        container.register(NetworkService.init)
-            .as (NetworkServiceInput.self)
+struct ServicesAssembly: DIPart {
+    
+    var body: some DIPart {
+        DIRegister(NetworkService.init)
+            .as(NetworkServiceInput.self)
     }
 }

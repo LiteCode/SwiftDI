@@ -8,9 +8,6 @@
 import Foundation
 import Combine
 
-@available(*, deprecated, renamed: "Inject")
-public typealias Injectable = Inject
-
 /// Read only property wrapper injector.
 
 @propertyWrapper

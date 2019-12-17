@@ -20,8 +20,17 @@ public final class DIContainer: CustomStringConvertible {
         componentManager = DIComponentManager()
     }
     
-    public func appendPart(_ part: DIPart.Type) {
+    public convenience init<Content: DIPart>(part: Content) {
+        self.init()
+        part.build(container: self)
+    }
+    
+    public func appendPart<Content: DIPart>(_ part: Content.Type) {
         part.load(container: self)
+    }
+    
+    public func appendPart<Content: DIPart>(_ part: Content) {
+        part.build(container: self)
     }
     
     @discardableResult
@@ -32,7 +41,6 @@ public final class DIContainer: CustomStringConvertible {
     
     public func resolve<T>(bundle: Bundle? = nil) -> T {
         return resolver.resolve(bundle: bundle)
-        
     }
     
     public func didConnectToSwiftDI() {
@@ -46,6 +54,16 @@ public final class DIContainer: CustomStringConvertible {
         for object in objects {
             resolver.addSingletone(object)
         }
+    }
+    
+    @discardableResult
+    func registerObject(_ object: DIObject) -> DIComponentContext<Any> {
+        return DIComponentContext(container: self, object: object)
+    }
+    
+    func mergeContainers(_ componentManager: DIComponentManager) {
+        let newContainers = componentManager.registerContainers
+        self.componentManager.registerContainers.merge(newContainers) { _, new in new }
     }
     
 }
