@@ -6,6 +6,7 @@ target 'SwiftDIDemo' do
   use_frameworks!
 
   pod 'SwiftDI', :path => '../'
+  pod 'SwiftDILint', :path => '../'
   # Pods for SwiftDIDemo
 
 end
