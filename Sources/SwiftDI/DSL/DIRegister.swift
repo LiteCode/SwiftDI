@@ -23,12 +23,12 @@ public struct DIRegister<T>: DIPart {
         self.manager.insert(object, forType: T.self)
     }
     
-    public func `as`<U>(_ type: U.Type) -> some DIPart {
+    public func `as`<U>(_ type: U.Type) -> DIRegister {
         self.manager.insert(self.object, forType: type)
         return self
     }
     
-    public func lifeCycle(_ value: DILifeCycle) -> some DIPart {
+    public func lifeCycle(_ value: DILifeCycle) -> DIRegister {
         self.object.lifeCycle = value
         return self
     }
