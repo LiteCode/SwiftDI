@@ -8,84 +8,24 @@
 import Foundation
 
 struct RegisterObject: Codable {
-    var lifeTime: String
+    var lifeTime: DILifeCycle
     var objectType: ObjectType
     var additionalType: [ObjectType]
     var location: FileLocation
+}
+
+public enum DILifeCycle: String, Codable {
+    /// Dependency is created one per container.
+    case single
     
-    init(name: String, line: Int, file: String) throws {
-        self.location = FileLocation(line: line, file: file)
-        
-        let tokens = Self.parse(name: name)
-        
-        var registerObject: ObjectType?
-        var additionalTypes: [ObjectType] = []
-        var lifeTime: String?
-        
-        for token in tokens {
-            switch token {
-            case .as(let objectType):
-                additionalTypes.append(objectType)
-            case .register(let object):
-                registerObject = object
-            case .lifeTime(let time):
-                lifeTime = time
-            }
-        }
-        
-        guard let mainObject = registerObject else {
-            fatalError("Register object not found in file \(file) at line \(line)")
-        }
-        
-        
-        
-        self.objectType = registerObject!
-        self.lifeTime = lifeTime!
-        self.additionalType = additionalTypes
-    }
+    /// Dependency instance is created each time.
+    case prototype
     
-    enum Token {
-        case register(ObjectType)
-        case `as`(ObjectType)
-        case lifeTime(String)
-    }
+    /// Dependency is created one per container, but destory when dependency object will deinit.
+    case weakSingle
     
-    static func parse(name: String) -> [Token] {
-        let trimmedName = name.trimmingCharacters(in: .whitespaces)
-        let elements = trimmedName.split(separator: Character("\n")).map(String.init).map { $0.trimmingCharacters(in: .whitespaces) }
-        
-        let regular = try! NSRegularExpression(pattern: "\\((.*?)\\)")
-        
-        var tokens: [Token] = []
-        
-        for element in elements {
-            if element.hasPrefix("DIRegister") {
-                if let match = regular.firstMatch(in: element, range: element.nsRange) {
-                    let name = match
-                        .replacingOccurrences(of: "(", with: "")
-                        .replacingOccurrences(of: ")", with: "")
-                        .replacingOccurrences(of: ".init", with: "")
-                    tokens.append(.register(ObjectType(name: name)))
-                }
-            } else if element.hasPrefix(".lifeCycle") {
-                if let match = regular.firstMatch(in: element, range: element.nsRange) {
-                    let name = match
-                        .replacingOccurrences(of: ".", with: "")
-                        .replacingOccurrences(of: "(", with: "")
-                        .replacingOccurrences(of: ")", with: "")
-                    tokens.append(.lifeTime(name))
-                }
-            } else if element.hasPrefix(".as") {
-                if let match = regular.firstMatch(in: element, range: element.nsRange) {
-                    let name = match
-                        .replacingOccurrences(of: "(", with: "")
-                        .replacingOccurrences(of: ")", with: "")
-                        .replacingOccurrences(of: ".self", with: "")
-                    tokens.append(.as(ObjectType(name: name)))
-                }
-            }
-        }
-        
-        return tokens
-    }
+    /// Dependency instance is created one per object graph.
+    case objectGraph
+    
+    case `default`
 }

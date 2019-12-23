@@ -12,18 +12,32 @@ typealias Injected = Inject
 
 struct HomeAssembly : DIPart {
     
-    
     @Injected private var inject: HomeViewModel
     @CustomInject private var string: String
     
     var body: some DIPart {
         DIGroup {
+            
+            ServicesAssembly()
+            
+            services
+            
             DIRegister(HomeViewModel.init)
                 .lifeCycle(.prototype)
                 .lifeCycle(.prototype)
                 .lifeCycle(.prototype)
                 .as (HomeViewModel.self)
+            
+            DIGroup {
+                services
+                
+                 DIRegister(String.init)
+            }
         }
+    }
+    
+    private var services: some DIPart {
+        ServicesAssembly()
     }
 }
 

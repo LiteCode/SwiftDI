@@ -11,12 +11,11 @@ protocol Token: Codable {
     var offset: Int { get }
     var length: Int { get }
     var line: Int { get }
+    var fileName: String { get }
 }
 
-
-struct DIPartToken: Token {
-//    let part: DIPart
-    var offset: Int
-    var length: Int
-    var line: Int
+extension Token {
+    var location: FileLocation {
+        return FileLocation(line: self.line, file: self.fileName)
+    }
 }

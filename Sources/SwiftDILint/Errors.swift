@@ -30,14 +30,16 @@ enum XcodeLogLevel: String {
     case error, warning
 }
 
-
 enum DIError: XcodeError {
     
     case multipleProduce(type: ObjectType, for: ObjectType, location: FileLocation)
+    case missRegistration(type: ObjectType, location: FileLocation)
     
     var location: FileLocation? {
         switch self {
         case .multipleProduce(let value):
+            return value.location
+        case .missRegistration(let value):
             return value.location
         }
     }
@@ -45,7 +47,9 @@ enum DIError: XcodeError {
     var message: String {
         switch self {
         case .multipleProduce(let value):
-            return "Multiple object produce type \(value.type.name) for \(value.for.name)"
+            return "Multiple object produce type \(value.type.typeName) for \(value.for.typeName)"
+        case .missRegistration(let type, let location):
+            return "Object not registred in DIContainer."
         }
     }
     
@@ -53,6 +57,16 @@ enum DIError: XcodeError {
         switch self {
         case .multipleProduce:
             return .error
+        case .missRegistration:
+            return .warning
         }
+    }
+}
+
+struct ErrorCluster: LocalizedError {
+    let errors: [Error]
+    
+    var localizedDescription: String {
+        return errors.map { $0.localizedDescription }.joined(separator: "\n")
     }
 }

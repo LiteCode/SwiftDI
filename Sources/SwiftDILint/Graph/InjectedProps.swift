@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct InjectedProps {
+struct InjectedProperty {
     let location: FileLocation
     let injectedType: ObjectType
 }

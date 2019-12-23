@@ -11,4 +11,5 @@ enum DIPart {
     indirect case group([DIPart])
     case register(RegisterObject)
     indirect case custom(DIPart)
+    indirect case container(DIPart)
 }

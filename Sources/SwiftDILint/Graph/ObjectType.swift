@@ -7,6 +7,7 @@
 
 import Foundation
 
-struct ObjectType: Codable {
-    let name: String
+struct ObjectType: Codable, Equatable {
+    let typeName: String
 }
+
