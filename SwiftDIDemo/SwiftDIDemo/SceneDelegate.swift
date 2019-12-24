@@ -10,6 +10,8 @@ import UIKit
 import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    
+    @Injected private var app: UIApplication
 
     var window: UIWindow?
 

@@ -171,6 +171,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CD3630EF22C4E06600108376 /* Build configuration list for PBXNativeTarget "SwiftDIDemo" */;
 			buildPhases = (
+				EF097FDA23B268B300298E79 /* ShellScript */,
 				3E2F05544119409BBEB88A7D /* [CP] Check Pods Manifest.lock */,
 				CD3630D722C4E06400108376 /* Sources */,
 				CD3630D822C4E06400108376 /* Frameworks */,
@@ -275,6 +276,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftDIDemo/Pods-SwiftDIDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		EF097FDA23B268B300298E79 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftdi >/dev/null; then\n  swiftdi validate ${SRCROOT}\nelse\n  echo \"warning: SwiftDILint not installed, download from https://github.com/LiteCode/SwiftDI\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

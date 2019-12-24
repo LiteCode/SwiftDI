@@ -44,16 +44,16 @@ enum DIPartKind: String, Codable {
 struct SourceKitDIContainerRepresentation: Token, DIPartRepresentable {
     let offset: Int
     let length: Int
-    let fileName: String
+    let filePath: String
     let line: Int
     let parent: String?
     let kind: DIPartKind = .container
     
-    init?(ast: [String: SourceKitRepresentable], fileName: String, file: File, line: Int, parent: String?) {
+    init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int, parent: String?) {
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
         guard let length = SwiftDocKey.getLength(from: ast) else { return nil }
         
-        self.fileName = fileName
+        self.filePath = filePath
         self.line = line
         self.offset = Int(offset)
         self.length = Int(length)
@@ -64,21 +64,21 @@ struct SourceKitDIContainerRepresentation: Token, DIPartRepresentable {
 struct SourceKitDIGroupRepresentation: Token, DIPartRepresentable {
     let offset: Int
     let length: Int
-    let fileName: String
+    let filePath: String
     let line: Int
     let groupId: String
     let parent: String?
     let kind: DIPartKind = .group
     
-    init?(ast: [String: SourceKitRepresentable], fileName: String, file: File, line: Int, parent: String?) {
+    init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int, parent: String?) {
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
         guard let length = SwiftDocKey.getLength(from: ast) else { return nil }
         
-        self.fileName = fileName
+        self.filePath = filePath
         self.line = line
         self.offset = Int(offset)
         self.length = Int(length)
-        self.groupId = "\(fileName)|\(line)|\(parent ?? "")_"
+        self.groupId = "\(filePath)|\(line)|\(parent ?? "")_"
         self.parent = parent
     }
 }
@@ -89,11 +89,11 @@ struct SourceKitCustomDIPartRepresentation: Token, DIPartRepresentable {
     let name: String
     let line: Int
     let level: AccessibilityLevel
-    let fileName: String
+    let filePath: String
     let parent: String?
     let kind: DIPartKind = .extendedPart
     
-    init?(ast: [String: SourceKitRepresentable], fileName: String, file: File, line: Int, parent: String?) {
+    init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int, parent: String?) {
         
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
         
@@ -107,7 +107,7 @@ struct SourceKitCustomDIPartRepresentation: Token, DIPartRepresentable {
         guard let types = SwiftDocKey.getInheritedTypes(from: ast),
             types.contains(where: { (SwiftDocKey.getName(from: $0) == "DIPart") }) else { return nil }
         
-        self.fileName = fileName
+        self.filePath = filePath
         self.line = line
         self.offset = Int(offset)
         self.length = Int(length)
@@ -122,18 +122,18 @@ struct SourceKitUndefinedDIPartRepresentation: Token, DIPartRepresentable {
     let length: Int
     let line: Int
     let name: String
-    let fileName: String
+    let filePath: String
     let parent: String?
     let kind: DIPartKind = .extendedPart
     
-    init?(ast: [String: SourceKitRepresentable], fileName: String, file: File, line: Int, parent: String?) {
+    init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int, parent: String?) {
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
         guard let length = SwiftDocKey.getLength(from: ast) else { return nil }
         guard let name = SwiftDocKey.getName(from: ast) else { return nil }
         
         self.offset = Int(offset)
         self.length = Int(length)
-        self.fileName = fileName
+        self.filePath = filePath
         self.name = name
         self.parent = parent
         self.line = line
@@ -145,12 +145,12 @@ struct SourceKitInjectedPropertyRepresentation: Token {
     let length: Int
     let name: String
     let level: AccessibilityLevel
-    let fileName: String
+    let filePath: String
     let line: Int
     let typeName: String
     let propertyWrapper: DIPropertyWrapper
     
-    init?(ast: [String: SourceKitRepresentable], fileName: String, file: File, line: Int) {
+    init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int) {
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
         
         guard let length = SwiftDocKey.getLength(from: ast) else { return nil }
@@ -165,7 +165,7 @@ struct SourceKitInjectedPropertyRepresentation: Token {
         
         self.propertyWrapper = propertyWrapper
         self.line = line
-        self.fileName = fileName
+        self.filePath = filePath
         self.offset = Int(offset)
         self.length = Int(length)
         self.name = name
@@ -192,12 +192,12 @@ struct SourceKitDIRegisterRepresentation: Token, DIPartRepresentable {
     let line: Int
     let objectType: String
     let additionalTypes: [String]
-    let fileName: String
+    let filePath: String
     let lifeTime: String?
     let parent: String?
     let kind: DIPartKind = .register
     
-    init?(ast: [String: SourceKitRepresentable], fileName: String, file: File, line: Int, parent: String?) throws {
+    init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int, parent: String?) throws {
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
         
         guard let length = SwiftDocKey.getLength(from: ast) else { return nil }
@@ -224,7 +224,7 @@ struct SourceKitDIRegisterRepresentation: Token, DIPartRepresentable {
         guard let mainObject = registerObject else { return nil }
         
         self.line = line
-        self.fileName = fileName
+        self.filePath = filePath
         self.offset = Int(offset)
         self.length = Int(length)
         self.objectType = mainObject

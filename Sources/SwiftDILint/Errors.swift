@@ -17,7 +17,7 @@ extension XcodeError {
     var description: String {
         switch (self.location?.line, location?.file) {
         case (.some(let line), .some(let file)):
-            return "\(file):\(line + 1): \(logLevel.rawValue): \(message)."
+            return "\(file):\(line): \(logLevel.rawValue): \(message)."
         case (nil, .some(let file)):
             return "\(file):1: \(logLevel.rawValue): \(message)."
         case (_, nil):
@@ -47,9 +47,9 @@ enum DIError: XcodeError {
     var message: String {
         switch self {
         case .multipleProduce(let value):
-            return "Multiple object produce type \(value.type.typeName) for \(value.for.typeName)"
+            return "Multiple object produce type '\(value.type.typeName)' for '\(value.for.typeName)'"
         case .missRegistration(let type, _):
-            return "Object \(type) not registred in DIContainer."
+            return "Object '\(type.typeName)' not registred in DIContainer"
         }
     }
     
@@ -71,7 +71,7 @@ enum CommandError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidSourcePath(let path):
-            return "Inccorected path: \(path). --sourcePath can't direct to file, set directory instead"
+            return "Inccorected path: \(path). Path can't direct to file, set directory instead"
         }
     }
 }
@@ -79,7 +79,7 @@ enum CommandError: LocalizedError {
 struct ErrorCluster: LocalizedError {
     let errors: [Error]
     
-    var localizedDescription: String {
-        return errors.map { $0.localizedDescription }.joined(separator: "\n")
+    var errorDescription: String? {
+        return errors.map { String(describing: $0) }.joined(separator: "\n")
     }
 }

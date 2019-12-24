@@ -31,11 +31,11 @@ enum SourceKitKind: String {
 class Lexer {
     
     let file: File
-    let fileName: String
+    let filePath: String
     
-    init(file: File, fileName: String) {
+    init(file: File, filePath: String) {
         self.file = file
-        self.fileName = fileName
+        self.filePath = filePath
     }
     
     func tokens() throws -> [Token] {
@@ -53,7 +53,7 @@ class Lexer {
         if let kindString = SwiftDocKey.getKind(from: ast), let kind = SourceKitKind(rawValue: kindString) {
             switch kind {
             case .class, .struct, .enum:
-                if let customPart = SourceKitCustomDIPartRepresentation(ast: ast, fileName: self.fileName, file: self.file, line: line, parent: parent) {
+                if let customPart = SourceKitCustomDIPartRepresentation(ast: ast, filePath: self.filePath, file: self.file, line: line, parent: parent) {
                     tokens.append(customPart)
                     
                     if let children = SwiftDocKey.getSubstructure(from: ast) {
@@ -66,7 +66,7 @@ class Lexer {
                     }
                 }
             case .varClass, .varLocal, .varInstance, .varParameter, .varGlobal, .varStatic:
-                if let propertyWrapper = SourceKitInjectedPropertyRepresentation(ast: ast, fileName: self.fileName, file: self.file, line: line) {
+                if let propertyWrapper = SourceKitInjectedPropertyRepresentation(ast: ast, filePath: self.filePath, file: self.file, line: line) {
                     tokens.append(propertyWrapper)
                 }
             case .call:
@@ -76,10 +76,10 @@ class Lexer {
                 } else if let containerTokens = try tokenizeDIContainer(ast, line: &line, parent: parent) {
                     tokens += containerTokens
                     return tokens
-                } else if let register = try SourceKitDIRegisterRepresentation(ast: ast, fileName: self.fileName, file: self.file, line: line, parent: parent) {
+                } else if let register = try SourceKitDIRegisterRepresentation(ast: ast, filePath: self.filePath, file: self.file, line: line, parent: parent) {
                     tokens.append(register)
                     return tokens
-                } else if let undefinedDIPart = SourceKitUndefinedDIPartRepresentation(ast: ast, fileName: self.fileName, file: self.file, line: line, parent: parent), parent != nil {
+                } else if let undefinedDIPart = SourceKitUndefinedDIPartRepresentation(ast: ast, filePath: self.filePath, file: self.file, line: line, parent: parent), parent != nil {
                     tokens.append(undefinedDIPart)
                 }
             }
@@ -97,7 +97,7 @@ class Lexer {
     
     private func tokenizeDIContainer(_ ast: [String : SourceKitRepresentable], line: inout Int, parent: String?) throws -> [Token]? {
         guard let name = SwiftDocKey.getName(from: ast), name == "DIContainer",
-            let container = SourceKitDIContainerRepresentation(ast: ast, fileName: self.fileName, file: self.file, line: line, parent: parent),
+            let container = SourceKitDIContainerRepresentation(ast: ast, filePath: self.filePath, file: self.file, line: line, parent: parent),
             let closure = SwiftDocKey.getSubstructure(from: ast)?.first else { return nil }
         var tokens: [Token] = []
         tokens.append(container)
@@ -108,7 +108,7 @@ class Lexer {
     
     private func tokenizeDIGroup(_ ast: [String : SourceKitRepresentable], line: inout Int, parent: String?) throws -> [Token]? {
         guard let name = SwiftDocKey.getName(from: ast), name == "DIGroup",
-        let group = SourceKitDIGroupRepresentation(ast: ast, fileName: self.fileName, file: self.file, line: line, parent: parent),
+        let group = SourceKitDIGroupRepresentation(ast: ast, filePath: self.filePath, file: self.file, line: line, parent: parent),
             let closure = SwiftDocKey.getSubstructure(from: ast)?.first else { return nil }
         var tokens: [Token] = []
         tokens.append(group)
@@ -127,6 +127,7 @@ class Lexer {
     
 }
 
+// TODO: move to other file
 extension SwiftDocKey {
     static func getName(from ast: [String : SourceKitRepresentable]) -> String? {
         return ast[SwiftDocKey.name.rawValue] as? String

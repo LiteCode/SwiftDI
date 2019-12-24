@@ -31,9 +31,9 @@ class DILintContext {
     
     func getGraph() throws -> DependencyGraph {
         
-        for object in graphObjects {
-            object.objectType
-        }
+//        for object in graphObjects {
+//            object.objectType
+//        }
         
         return DependencyGraph()
     }

@@ -17,7 +17,7 @@ class Linker {
     }
     
     func link(into context: DILintContext) throws {
-        var diParts: [DIPart] = []
+//        var diParts: [DIPart] = []
         var unusedDIParts: [DIPartRepresentable] = []
         
         for token in tokens {

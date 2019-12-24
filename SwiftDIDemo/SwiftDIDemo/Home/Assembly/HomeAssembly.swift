@@ -20,16 +20,9 @@ struct HomeAssembly : DIPart {
             
             ServicesAssembly()
             
-            services
-            
-            DIRegister(HomeViewModel.init)
-                .lifeCycle(.prototype)
-                .lifeCycle(.prototype)
-                .lifeCycle(.prototype)
-                .as (HomeViewModel.self)
+
             
             DIGroup {
-                services
                 
                  DIRegister(String.init)
             }
@@ -37,7 +30,10 @@ struct HomeAssembly : DIPart {
     }
     
     private var services: some DIPart {
-        ServicesAssembly()
+        DIRegister(HomeViewModel.init)
+            .lifeCycle(.prototype)
+            .lifeCycle(.prototype)
+            .lifeCycle(.prototype)
     }
 }
 

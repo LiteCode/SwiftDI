@@ -11,11 +11,11 @@ protocol Token: Codable {
     var offset: Int { get }
     var length: Int { get }
     var line: Int { get }
-    var fileName: String { get }
+    var filePath: String { get }
 }
 
 extension Token {
     var location: FileLocation {
-        return FileLocation(line: self.line, file: self.fileName)
+        return FileLocation(line: self.line, file: self.filePath)
     }
 }

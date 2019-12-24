@@ -21,20 +21,23 @@ class ValidateCommand: Command {
         guard rootPath.isDirectory else {
             throw CommandError.invalidSourcePath(sourcePath)
         }
+        let projectFilePaths = try rootPath.recursiveChildren().filter { $0.isFile && $0.extension == "swift" }
         
-        let projectFilePaths = try path.recursiveChildren().filter { $0.isFile && $0.extension == "swift" }
-        
-        let context = DILintContext()
+        do {
+            let context = DILintContext()
 
-        for path in projectFilePaths {
-            guard let file = File(path: path.string) else { continue }
-            let lexer = Lexer(file: file, fileName: path.lastComponent)
-            let lexerTokens = try lexer.tokens()
-            let linker = Linker(tokens: lexerTokens)
-            try linker.link(into: context)
+            for path in projectFilePaths {
+                guard let file = File(path: path.string) else { continue }
+                let lexer = Lexer(file: file, filePath: path.string)
+                let lexerTokens = try lexer.tokens()
+                let linker = Linker(tokens: lexerTokens)
+                try linker.link(into: context)
+            }
+            
+            try context.validate()
+        } catch {
+            fputs(error.localizedDescription, __stderrp)
         }
-        
-        try context.validate()
     }
     
 }
