@@ -13,7 +13,7 @@ import Combine         // For PassthroughSubject
 
 class HomeViewModel : ObservableObject {
     
-    @Inject var networkService: NetworkServiceInput
+    @Injected var networkService: NetworkServiceInput
     
     @Published private(set) var image: UIImage?
     

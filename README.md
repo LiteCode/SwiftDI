@@ -94,6 +94,50 @@ DIRegister(MyService.init)
 
 also contains methods `lifeCycle()` and `as()`
 
+## SwiftDI Linter
+
+We also support compile time checking for you dependencies. For this magic use additional tools `swiftdi`.
+
+![](assets/swiftdilint_example.gif)
+
+### Installation
+
+### Using [CocoaPods](https://cocoapods.org):
+
+```ruby
+pod 'SwiftDILint'
+```
+
+This pod will download the SwiftDILint binaries in your  `Pods/`. For usage invoke it via `#{PODS_ROOT}/SwiftDILint/swiftdi` in your Script Build Phases.
+
+### Compile from source:
+You can also build SwiftDILint from source. Cloning this project and running command below:
+```
+$ make install
+```
+
+If you wanna uninstall SwiftDILint from you computer:
+```
+$ make uninstall
+```
+
+### Usage 
+
+For integraiting SwiftDILint into Xcode for getting warnings and errors, just add a new "Run Script Phase" with:
+
+```bash
+if which swiftdi >/dev/null; then
+  swiftdi validate ${SRCROOT}
+else
+  echo "warning: SwiftDILint not installed, download from https://github.com/LiteCode/SwiftDI"
+fi
+```
+Or if you've installed SwiftDILint via CocoaPods the script should look like this:
+
+```bash
+`#{PODS_ROOT}/SwiftDILint/swiftdi`
+```
+
 ## SwiftDI ❤️ SwiftUI!
 
 SwiftDI also supports `SwiftUI` framework. 
