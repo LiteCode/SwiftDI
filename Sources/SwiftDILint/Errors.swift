@@ -48,8 +48,8 @@ enum DIError: XcodeError {
         switch self {
         case .multipleProduce(let value):
             return "Multiple object produce type \(value.type.typeName) for \(value.for.typeName)"
-        case .missRegistration(let type, let location):
-            return "Object not registred in DIContainer."
+        case .missRegistration(let type, _):
+            return "Object \(type) not registred in DIContainer."
         }
     }
     
@@ -59,6 +59,19 @@ enum DIError: XcodeError {
             return .error
         case .missRegistration:
             return .warning
+        }
+    }
+}
+
+
+enum CommandError: LocalizedError {
+    
+    case invalidSourcePath(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidSourcePath(let path):
+            return "Inccorected path: \(path). --sourcePath can't direct to file, set directory instead"
         }
     }
 }

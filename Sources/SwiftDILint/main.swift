@@ -1,6 +1,7 @@
 import SourceKittenFramework
 import PathKit
 import Foundation
+import SwiftCLI
 
 
 // Error for xcode
@@ -28,3 +29,13 @@ for path in projectFilePaths {
 
 
 try context.validate()
+
+
+let version: String = "2.0"
+
+let cli = CLI(name: "swiftdi",
+              version: version,
+              description: "A tool for SwiftDI framework. Use it, if you wanna see error messages when you miss registration a object in Contaner. Work in compile time. Also can visualize dependencies in project.",
+              commands: [ValidateCommand()])
+
+cli.goAndExit()
