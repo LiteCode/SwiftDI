@@ -19,15 +19,15 @@ extension XcodeError {
     }
     
     func description(for logLevel: XcodeLogLevel) -> String {
-        switch (self.location?.line, location?.file, location?.character) {
-        case (.some(let line), .some(let file), .some(let character)):
-            return "\(file):\(line):\(character + 1): \(logLevel.rawValue): \(message)."
+        switch (self.location?.line, location?.file, location?.characters) {
+        case (.some(let line), .some(let file), .some(let characters)):
+            return "\(file):\(line):\(characters.location + 1): \(logLevel.rawValue): \(message)"
         case (.some(let line), .some(let file), nil):
-            return "\(file):\(line): \(logLevel.rawValue): \(message)."
+            return "\(file):\(line): \(logLevel.rawValue): \(message)"
         case (nil, .some(let file), _):
-            return "\(file):1: \(logLevel.rawValue): \(message)."
+            return "\(file):1: \(logLevel.rawValue): \(message)"
         case (_, nil,  _):
-            return "\(logLevel.rawValue): \(message)."
+            return "\(logLevel.rawValue): \(message)"
         }
     }
 }
@@ -53,9 +53,10 @@ enum DIError: XcodeError {
     var message: String {
         switch self {
         case .multipleProduce(let value):
-            return "Multiple object produce type '\(value.type.typeName)' for '\(value.for.typeName)'"
-        case .missRegistration(let type, _):
-            return "Object '\(type.typeName)' not registred in DIContainer"
+            return "Multiple object produce type '\(value.type.typeName)' for '\(value.for.typeName)'."
+        case .missRegistration(let type, let location):
+            let message = "Object '\(type.typeName)' not registred in DIContainer\n"
+            return self.underlineErrorIfNeeded(for: message, at: location)
         }
     }
     
@@ -67,6 +68,17 @@ enum DIError: XcodeError {
             return .warning
         }
     }
+    
+    private func underlineErrorIfNeeded(for message: String, at location: FileLocation) -> String {
+        var message = message
+        if let errorRange = location.characters, let underlineText = location.underlineText {
+            message += underlineText + "\n"
+            message += String(repeating: " ", count: max(errorRange.location, 0)) + "^" + String(repeating: "~", count: errorRange.length - 1) + "\n"
+            message += String(repeating: " ", count: max(errorRange.location, 0)) + "_"
+        }
+        return message
+        
+    }
 }
 
 
@@ -77,7 +89,7 @@ enum CommandError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidSourcePath(let path):
-            return "Inccorected path: \(path). Path can't direct to file, set directory instead"
+            return "Incorrected path: \(path). Path can't direct to file, set directory instead"
         }
     }
 }
@@ -85,6 +97,15 @@ enum CommandError: LocalizedError {
 struct ErrorCluster: LocalizedError {
     let errors: [XcodeError]
     let logLevel: XcodeLogLevel?
+    
+    var containsCriticalError: Bool {
+        
+        if let logLevel = logLevel {
+            return logLevel == .error
+        } else {
+            return self.errors.contains(where: { $0.logLevel == .error })
+        }
+    }
     
     var errorDescription: String? {
         return errors.map {

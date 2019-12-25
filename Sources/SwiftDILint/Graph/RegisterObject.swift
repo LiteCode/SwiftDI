@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct RegisterObject: Codable {
+struct RegisterObject: Codable, Equatable, Hashable {
     var lifeTime: DILifeCycle
     var objectType: ObjectType
     var additionalType: [ObjectType]
     var location: FileLocation
 }
 
-public enum DILifeCycle: String, Codable {
+public enum DILifeCycle: String, Codable, Equatable, Hashable {
     /// Dependency is created one per container.
     case single
     

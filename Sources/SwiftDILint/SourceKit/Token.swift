@@ -12,15 +12,20 @@ protocol Token: Codable {
     var length: Int { get }
     var line: Int { get }
     var filePath: String { get }
-    var character: Int? { get }
+    var characters: NSRange? { get }
+    var underlineText: String? { get }
 }
 
 extension Token {
-    var character: Int? { return nil }
+    var characters: NSRange? { return nil }
+    var underlineText: String? { return nil }
 }
 
 extension Token {
     var location: FileLocation {
-        return FileLocation(line: self.line, file: self.filePath, character: self.character)
+        return FileLocation(line: self.line,
+                            file: self.filePath,
+                            characters: self.characters,
+                            underlineText: self.underlineText)
     }
 }

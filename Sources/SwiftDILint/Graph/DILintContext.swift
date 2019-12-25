@@ -41,16 +41,40 @@ class DILintContext {
     
     func getGraph() throws -> DependencyGraph {
         
-        var objectGraphDepth = 0
+        let graph = DependencyGraph()
         
-        for object in graphObjects {
+        func graphResolver(for object: RegisterObject, depth: inout Int) throws {
+            
+            defer { depth -= 1 }
+            
+            let sourceVertex = graph.createVertex(for: object)
+            
             let injectedProperties = self.findInjected(for: object)
+            
+            depth += 1
+            
             for property in injectedProperties {
+                guard let registredObject = findObject(by: property.injectedType) else {
+                    throw DIError.missRegistration(type: property.injectedType, location: property.location)
+                }
                 
+                if registredObject.lifeTime != .single && registredObject.lifeTime != .weakSingle {
+                    
+                    depth += 1
+                    let destinationVertex = graph.createVertex(for: registredObject)
+                    graph.addNode(from: sourceVertex, to: destinationVertex)
+                    
+                    try graphResolver(for: registredObject, depth: &depth)
+                }
             }
         }
         
-        return DependencyGraph()
+        for object in graphObjects {
+            var graphDepth = 0
+            try graphResolver(for: object, depth: &graphDepth)
+        }
+        
+        return graph
     }
     
     private func findObject(by type: ObjectType) -> RegisterObject? {

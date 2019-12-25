@@ -16,7 +16,7 @@ class ValidateCommand: Command {
     
     @Param var sourcePath: String
     
-    @Flag("-fe", "--force-error", description: "Show errors instead of warning")
+    @Flag("-e", "--force-error", description: "Show errors instead of warning")
     var isForceError: Bool
     
     func execute() throws {
@@ -37,13 +37,19 @@ class ValidateCommand: Command {
                 try linker.link(into: context)
             }
             
-            try context.validate()
+//            try context.validate()
             
             let graph = try context.getGraph()
+            print(graph)
             try graph.validate()
         } catch {
-            fputs(error.localizedDescription, __stderrp)
-            exit(-1)
+            if let cluster = error as? ErrorCluster {
+                fputs(error.localizedDescription, __stderrp)
+                exit(cluster.containsCriticalError ? EXIT_FAILURE : EXIT_SUCCESS)
+            } else {
+                fputs(error.localizedDescription, __stderrp)
+                exit(EXIT_FAILURE)
+            }
         }
     }
     

@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct FileLocation: Codable {
+struct FileLocation: Codable, Equatable, Hashable {
     let line: Int
     let file: String
-    let character: Int?
+    let characters: NSRange?
+    let underlineText: String?
 }
