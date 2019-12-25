@@ -23,9 +23,6 @@ struct HomeAssembly : DIPart {
             services
             
             DIRegister(HomeViewModel.init)
-                .lifeCycle(.prototype)
-                .lifeCycle(.prototype)
-                .lifeCycle(.prototype)
                 .as (HomeViewModel.self)
             
             DIGroup {

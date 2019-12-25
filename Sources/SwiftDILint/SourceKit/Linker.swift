@@ -55,6 +55,8 @@ extension SourceKitDIRegisterRepresentation {
 
 extension SourceKitInjectedPropertyRepresentation {
     var injectedProperty: InjectedProperty {
-        InjectedProperty(location: self.location, injectedType: ObjectType(typeName: self.typeName))
+        InjectedProperty(location: self.location,
+                         injectedType: ObjectType(typeName: self.typeName),
+                         placeInObject: ObjectType(typeName: self.parent))
     }
 }

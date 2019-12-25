@@ -16,6 +16,9 @@ class ValidateCommand: Command {
     
     @Param var sourcePath: String
     
+    @Flag("-fe", "--force-error", description: "Show errors instead of warning")
+    var isForceError: Bool
+    
     func execute() throws {
         let rootPath = Path(sourcePath)
         guard rootPath.isDirectory else {
@@ -24,7 +27,7 @@ class ValidateCommand: Command {
         let projectFilePaths = try rootPath.recursiveChildren().filter { $0.isFile && $0.extension == "swift" }
         
         do {
-            let context = DILintContext()
+            let context = DILintContext(isForceError: isForceError)
 
             for path in projectFilePaths {
                 guard let file = File(path: path.string) else { continue }
@@ -35,8 +38,12 @@ class ValidateCommand: Command {
             }
             
             try context.validate()
+            
+            let graph = try context.getGraph()
+            try graph.validate()
         } catch {
             fputs(error.localizedDescription, __stderrp)
+            exit(-1)
         }
     }
     

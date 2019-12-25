@@ -10,4 +10,5 @@ import Foundation
 struct FileLocation: Codable {
     let line: Int
     let file: String
+    let character: Int?
 }

@@ -149,8 +149,10 @@ struct SourceKitInjectedPropertyRepresentation: Token {
     let line: Int
     let typeName: String
     let propertyWrapper: DIPropertyWrapper
+    let parent: String
+    var character: Int?
     
-    init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int) {
+    init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int, parent: String) {
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
         
         guard let length = SwiftDocKey.getLength(from: ast) else { return nil }
@@ -163,6 +165,7 @@ struct SourceKitInjectedPropertyRepresentation: Token {
         
         guard let propertyWrapper = Self.constainsDIPropertyWrapper(propertyWrapperAttribute, contents: file.contents) else { return nil }
         
+        self.character = file.lines[safe: line - 1]?.content.bridge().range(of: typeName).lowerBound
         self.propertyWrapper = propertyWrapper
         self.line = line
         self.filePath = filePath
@@ -170,6 +173,7 @@ struct SourceKitInjectedPropertyRepresentation: Token {
         self.length = Int(length)
         self.name = name
         self.typeName = typeName
+        self.parent = parent
         self.level = AccessibilityLevel(rawValue: level) ?? .internal
     }
     
@@ -295,4 +299,10 @@ enum DIPropertyWrapper: String, Codable {
 protocol DIPartRepresentable {
     var parent: String? { get }
     var kind: DIPartKind { get }
+}
+
+extension Collection {
+    subscript (safe index: Index) -> Element? {
+        return self.indices.contains(index) ? self[index] : nil
+    }
 }

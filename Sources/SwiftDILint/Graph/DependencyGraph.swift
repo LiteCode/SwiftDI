@@ -8,6 +8,7 @@
 import Foundation
 
 class DependencyGraph {
+    
     var singletones: [RegisterObject] = []
     var graph: [RegisterObject] = []
     

@@ -15,12 +15,18 @@ protocol XcodeError: Error, CustomStringConvertible {
 
 extension XcodeError {
     var description: String {
-        switch (self.location?.line, location?.file) {
-        case (.some(let line), .some(let file)):
+        self.description(for: self.logLevel)
+    }
+    
+    func description(for logLevel: XcodeLogLevel) -> String {
+        switch (self.location?.line, location?.file, location?.character) {
+        case (.some(let line), .some(let file), .some(let character)):
+            return "\(file):\(line):\(character + 1): \(logLevel.rawValue): \(message)."
+        case (.some(let line), .some(let file), nil):
             return "\(file):\(line): \(logLevel.rawValue): \(message)."
-        case (nil, .some(let file)):
+        case (nil, .some(let file), _):
             return "\(file):1: \(logLevel.rawValue): \(message)."
-        case (_, nil):
+        case (_, nil,  _):
             return "\(logLevel.rawValue): \(message)."
         }
     }
@@ -77,9 +83,16 @@ enum CommandError: LocalizedError {
 }
 
 struct ErrorCluster: LocalizedError {
-    let errors: [Error]
+    let errors: [XcodeError]
+    let logLevel: XcodeLogLevel?
     
     var errorDescription: String? {
-        return errors.map { String(describing: $0) }.joined(separator: "\n")
+        return errors.map {
+            if let level = self.logLevel {
+                return $0.description(for: level)
+            } else {
+                return $0.description
+            }
+        }.joined(separator: "\n")
     }
 }

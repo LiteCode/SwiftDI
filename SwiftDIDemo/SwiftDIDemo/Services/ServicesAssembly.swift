@@ -12,6 +12,6 @@ struct ServicesAssembly: DIPart {
     
     var body: some DIPart {
         DIRegister(NetworkService.init)
-            .as(NetworkServiceInput.self)
+//            .as(NetworkServiceInput.self)
     }
 }
