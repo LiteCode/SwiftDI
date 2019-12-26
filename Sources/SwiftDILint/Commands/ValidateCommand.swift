@@ -40,6 +40,8 @@ class ValidateCommand: Command {
             try context.validate()
             
             let graph = try context.getGraph()
+            // TODO: Remove
+            try graph.save(by: Path(rootPath.parent().url.appendingPathComponent("graph").appendingPathExtension("json").path))
             try graph.validate()
         } catch {
             if let cluster = error as? ErrorCluster {

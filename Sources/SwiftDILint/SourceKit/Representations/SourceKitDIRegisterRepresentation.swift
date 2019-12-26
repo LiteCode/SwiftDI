@@ -82,6 +82,8 @@ struct SourceKitDIRegisterRepresentation: Token, DIPartRepresentable {
         var tokens: [Token] = []
         
         for element in elements {
+            
+            // TODO: SwiftDILint doesn't recognize nested object when using clouser instead of autoclouser
             if element.hasPrefix("DIRegister") {
                 if let match = regular.firstMatch(in: element, range: element.nsRange) {
                     let name = match

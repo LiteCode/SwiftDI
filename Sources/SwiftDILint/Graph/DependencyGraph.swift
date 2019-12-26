@@ -6,10 +6,13 @@
 //
 
 import Foundation
+import PathKit
 
-class DependencyGraph: CustomStringConvertible {
+class DependencyGraph: Codable {
     
-    private var graph: [GraphVertex: [GraphNode]] = [:]
+    var graph: [String: [String]] = [:]
+    var nodes: [String: GraphNode] = [:]
+    var vertexes: [String: GraphVertex] = [:]
     
     func validate() throws {
         
@@ -18,14 +21,15 @@ class DependencyGraph: CustomStringConvertible {
     func containsVertex(for object: RegisterObject) -> Bool {
         let vertex = GraphVertex(object: object)
         
-        return graph[vertex] != nil
+        return graph[vertex.id] != nil
     }
     
     func createVertex(for object: RegisterObject) -> GraphVertex {
         let vertex = GraphVertex(object: object)
         
-        if graph[vertex] == nil {
-            graph[vertex] = []
+        if graph[vertex.id] == nil {
+            graph[vertex.id] = []
+            vertexes[vertex.id] = vertex
         }
         
         return vertex
@@ -33,42 +37,67 @@ class DependencyGraph: CustomStringConvertible {
     
     subscript(_ object: RegisterObject) -> [GraphNode]? {
         let vertex = GraphVertex(object: object)
-        return graph[vertex]
+        return graph[vertex.id]?.compactMap { nodes[$0] }
+    }
+    
+    subscript(_ vertex: GraphVertex) -> [GraphNode]? {
+        return graph[vertex.id]?.compactMap { nodes[$0] }
     }
     
     func addNode(from source: GraphVertex, to destination: GraphVertex) {
-        let node = GraphNode(from: source, to: destination)
+        let node = GraphNode(id: UUID().uuidString, from: source, to: destination)
         
-        if graph[source] == nil {
+        if graph[source.id] == nil {
             fatalError("Can't use node, because source vertex doesn't stored in current DependencyGraph")
         }
         
-        graph[source]?.append(node)
+        nodes[node.id] = node
+        graph[source.id]?.append(node.id)
     }
     
-    func getNodes(from source: GraphVertex) -> [GraphNode]? {
-        return graph[source]
+    func save(by path: Path) throws {
+        let data = try JSONEncoder().encode(self)
+        try path.write(data)
     }
     
+    static func read(from path: Path) throws -> DependencyGraph? {
+        let data = try path.read()
+        return try JSONDecoder().decode(DependencyGraph.self, from: data)
+    }
+    
+}
+
+extension DependencyGraph: CustomStringConvertible {
+    // taken from https://www.raywenderlich.com/773-swift-algorithm-club-graphs-with-adjacency-list
     var description: String {
-      var result = ""
-      for (vertex, edges) in graph {
-        var edgeString = ""
-        for (index, edge) in edges.enumerated() {
-          if index != edges.count - 1 {
-            edgeString.append("\(edge.destination), ")
-          } else {
-            edgeString.append("\(edge.destination)")
-          }
+        var result = ""
+        for (vertexId, edges) in graph {
+            guard let vertex = vertexes[vertexId] else { continue }
+            
+            var edgeString = ""
+            for (index, edgeId) in edges.enumerated() {
+                guard let edge = nodes[edgeId] else { continue }
+                
+                if index != edges.count - 1 {
+                    edgeString.append("\(edge.destination), ")
+                } else {
+                    edgeString.append("\(edge.destination)")
+                }
+            }
+            result.append("\(vertex) ---> [ \(edgeString) ] \n ")
         }
-        result.append("\(vertex) ---> [ \(edgeString) ] \n ")
-      }
-      return result
+        return result
     }
 }
 
 struct GraphVertex: Codable, Equatable, Hashable, CustomStringConvertible {
-    var object: RegisterObject
+    let id: String
+    let object: RegisterObject
+    
+    init(object: RegisterObject) {
+        self.id = object.objectType.typeName
+        self.object = object
+    }
     
     var description: String {
         return object.objectType.typeName
@@ -77,10 +106,12 @@ struct GraphVertex: Codable, Equatable, Hashable, CustomStringConvertible {
 }
 
 struct GraphNode: Codable, Equatable, Hashable {
+    let id: String
     let source: GraphVertex
     let destination: GraphVertex
     
-    init(from source: GraphVertex, to destination: GraphVertex) {
+    init(id: String, from source: GraphVertex, to destination: GraphVertex) {
+        self.id = id
         self.source = source
         self.destination = destination
     }
