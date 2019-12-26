@@ -7,13 +7,18 @@
 
 import Foundation
 
+@available(OSX 10.15, *)
+typealias DependencyGraph = Graph<RegisterObject>
+
+@available(OSX 10.15, *)
+typealias PartInitialGraph = Graph<DIPart>
+
 class DILintContext {
     var singletones: [RegisterObject] = []
     var graphObjects: [RegisterObject] = []
     var prototypies: [RegisterObject] = []
     var injected: [InjectedProperty] = []
     var parts: [DIPart] = []
-    var unusedParts: [DIPart] = []
     
     private let isForceError: Bool
     
@@ -26,6 +31,11 @@ class DILintContext {
         return singletones + prototypies + graphObjects
     }
     
+    /// We validate all found injected properties.
+    /// If injected property doesn't have a registred object, that method throw error
+    /// Otherwise, if we've unused registred object, method throw erros
+    ///
+    /// - Throws: Throw ErrorCluster object, contains all errors founded when validate performed.
     func validate() throws {
         var errors: [XcodeError] = []
         var usedRegistedObject: [RegisterObject] = []
@@ -47,12 +57,15 @@ class DILintContext {
         throw ErrorCluster(errors: errors, logLevel: isForceError ? .error : nil)
     }
     
-    func getGraph() throws -> DependencyGraph {
+    /// Build and return dependency graph for all registred object
+    /// - Returns: Completed and validated dependency graph.
+    @available(OSX 10.15, *)
+    func dependencyGraph() throws -> DependencyGraph {
         
         let graph = DependencyGraph()
         
         @discardableResult
-        func graphResolver(for object: RegisterObject, depth: inout Int) throws -> GraphVertex {
+        func graphResolver(for object: RegisterObject, depth: inout Int) throws -> GraphVertex<RegisterObject> {
             defer { depth -= 1 }
             
             if graph.containsVertex(for: object) {
@@ -84,6 +97,36 @@ class DILintContext {
         return graph
     }
     
+    // FIXME: Currently broken
+    @available(OSX 10.15, *)
+    func partsInitialGraph() throws -> PartInitialGraph {
+        var graph = PartInitialGraph()
+        
+        @discardableResult
+        func graphResolver(for part: DIPart) throws -> GraphVertex<DIPart> {
+            if graph.containsVertex(for: part) {
+                return graph.createVertex(for: part)
+            }
+            
+            let sourceVertex = graph.createVertex(for: part)
+            
+            let parts = self.parts.filter { $0.parent == part.id }
+            
+            for part in parts {
+                let destinationVertex = try graphResolver(for: part)
+                graph.addNode(from: sourceVertex, to: destinationVertex)
+            }
+            
+            return sourceVertex
+        }
+        
+        for part in parts {
+            _ = try graphResolver(for: part)
+        }
+        
+        return graph
+    }
+    
     // MARK: - Private
     
     /// Return registred object by type
@@ -94,7 +137,6 @@ class DILintContext {
     private func findInjected(for registeredObject: RegisterObject) -> [InjectedProperty] {
         return self.injected.filter { registeredObject.objectType == $0.placeInObject || registeredObject.additionalType.contains($0.placeInObject) }
     }
-    
 }
 
 private extension Array where Element == RegisterObject {

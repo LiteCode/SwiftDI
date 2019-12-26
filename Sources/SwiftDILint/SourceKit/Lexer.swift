@@ -87,6 +87,8 @@ class Lexer {
         return tokens
     }
     
+    // MARK: - Private
+    
     private func tokenizeDIContainer(_ ast: [String : SourceKitRepresentable], line: inout Int, parent: String?) throws -> [Token]? {
         guard let name = SwiftDocKey.getName(from: ast), name == "DIContainer",
             let container = SourceKitDIContainerRepresentation(ast: ast, filePath: self.filePath, file: self.file, line: line, parent: parent),

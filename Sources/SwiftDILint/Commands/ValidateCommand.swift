@@ -37,12 +37,19 @@ class ValidateCommand: Command {
                 try linker.link(into: context)
             }
             
-            try context.validate()
+//            try context.validate()
             
-            let graph = try context.getGraph()
-            // TODO: Remove
-            try graph.save(by: Path(rootPath.parent().url.appendingPathComponent("graph").appendingPathExtension("json").path))
-            try graph.validate()
+            if #available(OSX 10.15, *) {
+                let dependencyGraph = try context.dependencyGraph()
+                let initialGraph = try context.partsInitialGraph()
+                let graph = DILintGraph(version: version, dependencies: dependencyGraph, parts: initialGraph)
+                
+                let outputPath = rootPath.parent().url.appendingPathComponent("dilintgraph").appendingPathExtension("json")
+                try graph.save(to: Path(outputPath.path))
+            } else {
+                throw CommandError.unsupportedOSX(minimal: "10.15")
+            }
+            
         } catch {
             if let cluster = error as? ErrorCluster {
                 fputs(error.localizedDescription, __stderrp)
@@ -54,4 +61,16 @@ class ValidateCommand: Command {
         }
     }
     
+}
+
+@available(OSX 10.15, *)
+struct DILintGraph: Codable {
+    let version: String
+    let dependencies: DependencyGraph
+    let parts: PartInitialGraph
+    
+    func save(to path: Path) throws {
+        let data = try JSONEncoder().encode(self)
+        try path.write(data)
+    }
 }

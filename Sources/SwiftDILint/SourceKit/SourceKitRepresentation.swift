@@ -44,4 +44,5 @@ enum DIPartKind: String, Codable {
 protocol DIPartRepresentable {
     var parent: String? { get }
     var kind: DIPartKind { get }
+    var location: FileLocation { get }
 }

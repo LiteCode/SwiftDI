@@ -17,8 +17,6 @@ class Linker {
     }
     
     func link(into context: DILintContext) throws {
-        var unusedDIParts: [DIPartRepresentable] = []
-        
         for token in tokens {
             if let register = token as? SourceKitDIRegisterRepresentation {
                 let registerObject = register.registerObject
@@ -30,14 +28,36 @@ class Linker {
                 case .objectGraph, .default:
                     context.graphObjects.append(registerObject)
                 }
+                
+                let part = DIPart(id: register.objectType,
+                                  kind: .register,
+                                  location: register.location,
+                                  registerObject: register.registerObject,
+                                  parent: register.parent)
+                context.parts.append(part)
             } else if let property = token as? SourceKitInjectedPropertyRepresentation {
                 context.injected.append(property.injectedProperty)
-            } else if let undefinedPart = token as? SourceKitUndefinedDIPartRepresentation {
-                unusedDIParts.append(undefinedPart)
+            } else if let part = token as? SourceKitUndefinedDIPartRepresentation {
+                let part = DIPart(id: part.name,
+                                  kind: .extendedPart,
+                                  location: part.location,
+                                  registerObject: nil,
+                                  parent: part.parent)
+                context.parts.append(part)
             } else if let part = token as? SourceKitCustomDIPartRepresentation {
-                unusedDIParts.append(part)
+                let part = DIPart(id: part.name,
+                                  kind: .extendedPart,
+                                  location: part.location,
+                                  registerObject: nil,
+                                  parent: part.parent)
+                context.parts.append(part)
             } else if let group = token as? SourceKitDIGroupRepresentation {
-                unusedDIParts.append(group)
+                let part = DIPart(id: group.groupId,
+                                  kind: .group,
+                                  location: group.location,
+                                  registerObject: nil,
+                                  parent: group.parent)
+                context.parts.append(part)
             }
         }
     }

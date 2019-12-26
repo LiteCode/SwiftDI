@@ -93,11 +93,14 @@ enum DIError: XcodeError {
 enum CommandError: LocalizedError {
     
     case invalidSourcePath(String)
+    case unsupportedOSX(minimal: String)
     
     var errorDescription: String? {
         switch self {
         case .invalidSourcePath(let path):
             return "Incorrected path: \(path). Path can't direct to file, set directory instead"
+        case .unsupportedOSX(let version):
+            return "Unsupported macOS version, require \(version) or higher."
         }
     }
 }

@@ -7,11 +7,15 @@
 
 import Foundation
 
-struct RegisterObject: Codable, Equatable, Hashable {
+struct RegisterObject: Codable, Equatable, Hashable, Identifiable {
     var lifeTime: DILifeCycle
     var objectType: ObjectType
     var additionalType: [ObjectType]
     var location: FileLocation
+    
+    // MARK: Identifiable
+    
+    var id: String { return objectType.typeName }
 }
 
 public enum DILifeCycle: String, Codable, Equatable, Hashable {
