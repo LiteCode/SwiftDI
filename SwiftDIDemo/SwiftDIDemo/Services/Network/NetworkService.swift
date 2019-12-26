@@ -12,6 +12,8 @@ import Combine
 
 class NetworkService : NetworkServiceInput {
     
+    @Injected private var inject: HomeViewModel
+    
     func getData(block: @escaping (Data?) -> Void) {
         let url = URL(string: "https://avatars3.githubusercontent.com/u/45299494?s=200&v=4")!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in

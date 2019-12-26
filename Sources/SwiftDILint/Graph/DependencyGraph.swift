@@ -15,6 +15,12 @@ class DependencyGraph: CustomStringConvertible {
         
     }
     
+    func containsVertex(for object: RegisterObject) -> Bool {
+        let vertex = GraphVertex(object: object)
+        
+        return graph[vertex] != nil
+    }
+    
     func createVertex(for object: RegisterObject) -> GraphVertex {
         let vertex = GraphVertex(object: object)
         
@@ -23,6 +29,11 @@ class DependencyGraph: CustomStringConvertible {
         }
         
         return vertex
+    }
+    
+    subscript(_ object: RegisterObject) -> [GraphNode]? {
+        let vertex = GraphVertex(object: object)
+        return graph[vertex]
     }
     
     func addNode(from source: GraphVertex, to destination: GraphVertex) {

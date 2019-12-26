@@ -37,10 +37,9 @@ class ValidateCommand: Command {
                 try linker.link(into: context)
             }
             
-//            try context.validate()
+            try context.validate()
             
             let graph = try context.getGraph()
-            print(graph)
             try graph.validate()
         } catch {
             if let cluster = error as? ErrorCluster {

@@ -17,6 +17,7 @@ class DILintContext {
     
     private let isForceError: Bool
     
+    /// - Parameter isForceError: Replace all warnings to errors.
     init(isForceError: Bool) {
         self.isForceError = isForceError
     }
@@ -27,12 +28,19 @@ class DILintContext {
     
     func validate() throws {
         var errors: [XcodeError] = []
+        var usedRegistedObject: [RegisterObject] = []
+        
         for inject in injected {
             let type = inject.injectedType
-            if !self.allObjects.contains(objectType: type) {
-                    errors.append(DIError.missRegistration(type: inject.injectedType, location: inject.location))
+            if let object = self.findObject(by: type) {
+                usedRegistedObject.append(object)
+            } else {
+                errors.append(DIError.missRegistration(type: inject.injectedType, location: inject.location))
             }
         }
+        
+        // Transform all unused registred object to errors
+        errors += self.allObjects.lazy.filter { !usedRegistedObject.contains($0) }.map { DIError.unusedRegistration(type: $0.objectType, location: $0.location) }
         
         if errors.isEmpty { return }
         
@@ -43,33 +51,32 @@ class DILintContext {
         
         let graph = DependencyGraph()
         
-        func graphResolver(for object: RegisterObject, depth: inout Int) throws {
-            
+        @discardableResult
+        func graphResolver(for object: RegisterObject, depth: inout Int) throws -> GraphVertex {
             defer { depth -= 1 }
+            
+            if graph.containsVertex(for: object) {
+                return graph.createVertex(for: object)
+            }
             
             let sourceVertex = graph.createVertex(for: object)
             
             let injectedProperties = self.findInjected(for: object)
-            
-            depth += 1
             
             for property in injectedProperties {
                 guard let registredObject = findObject(by: property.injectedType) else {
                     throw DIError.missRegistration(type: property.injectedType, location: property.location)
                 }
                 
-                if registredObject.lifeTime != .single && registredObject.lifeTime != .weakSingle {
-                    
-                    depth += 1
-                    let destinationVertex = graph.createVertex(for: registredObject)
-                    graph.addNode(from: sourceVertex, to: destinationVertex)
-                    
-                    try graphResolver(for: registredObject, depth: &depth)
-                }
+                depth += 1
+                let destinationVertex = try graphResolver(for: registredObject, depth: &depth)
+                graph.addNode(from: sourceVertex, to: destinationVertex)
             }
+            
+            return sourceVertex
         }
         
-        for object in graphObjects {
+        for object in allObjects {
             var graphDepth = 0
             try graphResolver(for: object, depth: &graphDepth)
         }
@@ -77,6 +84,9 @@ class DILintContext {
         return graph
     }
     
+    // MARK: - Private
+    
+    /// Return registred object by type
     private func findObject(by type: ObjectType) -> RegisterObject? {
         return allObjects.first(where: { $0.objectType == type || $0.additionalType.contains(type) })
     }

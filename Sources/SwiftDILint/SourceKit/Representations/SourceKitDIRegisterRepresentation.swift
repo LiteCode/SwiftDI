@@ -18,6 +18,8 @@ struct SourceKitDIRegisterRepresentation: Token, DIPartRepresentable {
     let lifeTime: String?
     let parent: String?
     let kind: DIPartKind = .register
+    let characters: NSRange?
+    let underlineText: String?
     
     init?(ast: [String: SourceKitRepresentable], filePath: String, file: File, line: Int, parent: String?) throws {
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
@@ -45,6 +47,9 @@ struct SourceKitDIRegisterRepresentation: Token, DIPartRepresentable {
         
         guard let mainObject = registerObject else { return nil }
         
+        let content = file.lines[safe: line - 1]?.content.bridge()
+        self.characters = content?.range(of: mainObject)
+        self.underlineText = content?.bridge()
         self.line = line
         self.filePath = filePath
         self.offset = Int(offset)
@@ -67,7 +72,8 @@ struct SourceKitDIRegisterRepresentation: Token, DIPartRepresentable {
         
         guard let length = SwiftDocKey.getLength(from: ast) else { return [] }
         
-        let content = contents.bridge().substring(with: NSRange(location: Int(offset - 1), length: Int(length))).replacingOccurrences(of: " ", with: "")
+        guard let range = Range<String.Index>(NSRange(location: Int(offset - 1), length: Int(length)), in: contents) else { return [] }
+        let content = contents[range].replacingOccurrences(of: " ", with: "")
         
         let elements = content.split(separator: Character("\n")).map(String.init).map { $0.trimmingCharacters(in: .whitespaces) }
         
