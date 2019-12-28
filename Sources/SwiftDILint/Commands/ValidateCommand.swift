@@ -27,28 +27,24 @@ class ValidateCommand: Command {
         let projectFilePaths = try rootPath.recursiveChildren().filter { $0.isFile && $0.extension == "swift" }
         
         do {
-            let context = DILintContext(isForceError: isForceError)
-            
-            var tokens: [Token] = []
-
-            for path in projectFilePaths {
-                guard let file = File(path: path.string) else { continue }
-                let lexer = Lexer(file: file, filePath: path.string)
-                tokens += try lexer.tokens()
-            }
-            
-            let linker = Linker(tokens: tokens)
-            try linker.link(into: context)
-            
-//            try context.validate()
-            
             if #available(OSX 10.15, *) {
-                let dependencyGraph = try context.dependencyGraph()
-                let initialTree = try context.partsInitialTree()
-                let graph = DILintGraph(version: version, dependencies: dependencyGraph, parts: initialTree)
+                let context = DILintContext(isForceError: isForceError)
+                
+                var tokens: [Token] = []
+                
+                for path in projectFilePaths {
+                    guard let file = File(path: path.string) else { continue }
+                    let lexer = Lexer(file: file, filePath: path.string)
+                    tokens += try lexer.tokens()
+                }
+                
+                let linker = Linker(tokens: tokens)
+                try linker.link(into: context)
+                
+                let result = try context.validate()
                 
                 let outputPath = rootPath.parent().url.appendingPathComponent("dilintgraph").appendingPathExtension("json")
-                try graph.save(to: Path(outputPath.path))
+                try result.save(to: Path(outputPath.path))
             } else {
                 throw CommandError.unsupportedOSX(minimal: "10.15")
             }
@@ -64,16 +60,4 @@ class ValidateCommand: Command {
         }
     }
     
-}
-
-@available(OSX 10.15, *)
-struct DILintGraph: Codable {
-    let version: String
-    let dependencies: DependencyGraph
-    let parts: PartInitialTree
-    
-    func save(to path: Path) throws {
-        let data = try JSONEncoder().encode(self)
-        try path.write(data)
-    }
 }

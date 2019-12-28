@@ -21,15 +21,15 @@ class Tree<T: Codable & Hashable & Identifiable>: Codable, Hashable {
     }
     
     func search(_ value: T) -> Tree<T>? {
-      if value == self.value {
-        return self
-      }
-      for node in nodes {
-        if let found = node.search(value) {
-          return found
+        if value == self.value {
+            return self
         }
-      }
-      return nil
+        for node in nodes {
+            if let found = node.search(value) {
+                return found
+            }
+        }
+        return nil
     }
 }
 

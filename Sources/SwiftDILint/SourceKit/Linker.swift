@@ -8,6 +8,7 @@
 import Foundation
 import SourceKittenFramework
 
+@available(OSX 10.15, *)
 class Linker {
     
     private let tokens: [Token]
@@ -80,7 +81,6 @@ class Linker {
         filterTokens.reserveCapacity(tokens.count)
         
         var undefinedDIPart: [SourceKitUndefinedDIPartRepresentation] = oldTokens.dropAll(where: { $0 is SourceKitUndefinedDIPartRepresentation }).map { $0 as! SourceKitUndefinedDIPartRepresentation }
-//        let extendedDIPart [SourceKitCustomDIPartRepresentation] = tokens.compactMap { $0 as? SourceKitCustomDIPartRepresentation }
         
         for token in oldTokens {
             autoreleasepool {

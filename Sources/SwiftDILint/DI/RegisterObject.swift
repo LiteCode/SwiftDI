@@ -16,6 +16,10 @@ struct RegisterObject: Codable, Equatable, Hashable, Identifiable {
     // MARK: Identifiable
     
     var id: String { return objectType.typeName }
+    
+    static func == (lhs: RegisterObject, rhs: RegisterObject) -> Bool {
+        return lhs.objectType == rhs.objectType && lhs.additionalType == rhs.additionalType && lhs.lifeTime == rhs.lifeTime
+    }
 }
 
 public enum DILifeCycle: String, Codable, Equatable, Hashable {

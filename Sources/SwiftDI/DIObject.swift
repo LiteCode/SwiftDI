@@ -11,6 +11,7 @@ class DIObject: CustomDebugStringConvertible {
     
     let lazy: Lazy
     let type: Any.Type
+    var lifeCycle: DILifeCycle = SwiftDI.Defaults.lifeCycle
     
     var bundle: Bundle? {
         if let anyClass = type as? AnyClass {
@@ -24,8 +25,6 @@ class DIObject: CustomDebugStringConvertible {
         self.lazy = lazy
         self.type = type
     }
-    
-    var lifeCycle: DILifeCycle = SwiftDI.Defaults.lifeCycle
     
     var debugDescription: String {
         let address = Unmanaged.passUnretained(self).toOpaque()

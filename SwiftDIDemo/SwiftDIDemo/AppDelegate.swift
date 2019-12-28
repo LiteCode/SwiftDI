@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Create and init our container
         let container = DIContainer(part:
             DIGroup {
-                ServicesAssembly()
+//                ServicesAssembly()
                 HomeAssembly()
             }
         )

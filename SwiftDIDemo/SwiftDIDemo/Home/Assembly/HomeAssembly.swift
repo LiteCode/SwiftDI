@@ -27,8 +27,6 @@ struct HomeAssembly : DIPart {
             
             DIGroup {
                 services
-                
-                 DIRegister(String.init)
             }
         }
     }
