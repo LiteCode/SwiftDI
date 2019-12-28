@@ -9,6 +9,7 @@ import Foundation
 import SourceKittenFramework
 
 struct SourceKitDIContainerRepresentation: Token, DIPartRepresentable {
+    let id: String
     let offset: Int
     let length: Int
     let filePath: String
@@ -20,6 +21,7 @@ struct SourceKitDIContainerRepresentation: Token, DIPartRepresentable {
         guard let offset = SwiftDocKey.getOffset(from: ast) else { return nil }
         guard let length = SwiftDocKey.getLength(from: ast) else { return nil }
         
+        self.id = UUID().uuidString
         self.filePath = filePath
         self.line = line
         self.offset = Int(offset)

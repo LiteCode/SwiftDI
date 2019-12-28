@@ -41,6 +41,7 @@ enum DIError: XcodeError {
     case multipleProduce(type: ObjectType, for: ObjectType, location: FileLocation)
     case missRegistration(type: ObjectType, location: FileLocation)
     case unusedRegistration(type: ObjectType, location: FileLocation)
+    case containerNotFound
     
     var location: FileLocation? {
         switch self {
@@ -50,6 +51,8 @@ enum DIError: XcodeError {
             return value.location
         case .unusedRegistration(let value):
             return value.location
+        default:
+            return nil
         }
     }
     
@@ -63,6 +66,8 @@ enum DIError: XcodeError {
         case .unusedRegistration(let type, let location):
             let message = "Registred object '\(type.typeName)' is unused in project"
             return self.underlineErrorIfNeeded(for: message, at: location)
+        case .containerNotFound:
+            return "Can't find DIContainer in your project"
         }
     }
     
@@ -74,6 +79,8 @@ enum DIError: XcodeError {
             return .warning
         case .unusedRegistration:
             return .warning
+        case .containerNotFound:
+            return .error
         }
     }
     

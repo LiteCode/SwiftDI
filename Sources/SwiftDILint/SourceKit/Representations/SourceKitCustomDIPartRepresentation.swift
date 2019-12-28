@@ -40,4 +40,14 @@ struct SourceKitCustomDIPartRepresentation: Token, DIPartRepresentable {
         self.level = AccessibilityLevel(rawValue: level) ?? .internal
         self.parent = parent
     }
+    
+    init(undefined: SourceKitUndefinedDIPartRepresentation, from custom: SourceKitCustomDIPartRepresentation) {
+        self.offset = undefined.offset
+        self.length = undefined.length
+        self.name = undefined.name
+        self.line = undefined.line
+        self.level = custom.level
+        self.filePath = undefined.filePath
+        self.parent = undefined.parent
+    }
 }

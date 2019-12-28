@@ -96,7 +96,7 @@ class Lexer {
         var tokens: [Token] = []
         tokens.append(container)
         line = self.line(for: closure) ?? line
-        tokens += try tokenizeAST(closure, line: &line, parent: parent)
+        tokens += try tokenizeAST(closure, line: &line, parent: container.id)
         return tokens
     }
     

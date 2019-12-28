@@ -28,21 +28,24 @@ class ValidateCommand: Command {
         
         do {
             let context = DILintContext(isForceError: isForceError)
+            
+            var tokens: [Token] = []
 
             for path in projectFilePaths {
                 guard let file = File(path: path.string) else { continue }
                 let lexer = Lexer(file: file, filePath: path.string)
-                let lexerTokens = try lexer.tokens()
-                let linker = Linker(tokens: lexerTokens)
-                try linker.link(into: context)
+                tokens += try lexer.tokens()
             }
+            
+            let linker = Linker(tokens: tokens)
+            try linker.link(into: context)
             
 //            try context.validate()
             
             if #available(OSX 10.15, *) {
                 let dependencyGraph = try context.dependencyGraph()
-                let initialGraph = try context.partsInitialGraph()
-                let graph = DILintGraph(version: version, dependencies: dependencyGraph, parts: initialGraph)
+                let initialTree = try context.partsInitialTree()
+                let graph = DILintGraph(version: version, dependencies: dependencyGraph, parts: initialTree)
                 
                 let outputPath = rootPath.parent().url.appendingPathComponent("dilintgraph").appendingPathExtension("json")
                 try graph.save(to: Path(outputPath.path))
@@ -67,7 +70,7 @@ class ValidateCommand: Command {
 struct DILintGraph: Codable {
     let version: String
     let dependencies: DependencyGraph
-    let parts: PartInitialGraph
+    let parts: PartInitialTree
     
     func save(to path: Path) throws {
         let data = try JSONEncoder().encode(self)

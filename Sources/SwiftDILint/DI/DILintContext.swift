@@ -11,7 +11,7 @@ import Foundation
 typealias DependencyGraph = Graph<RegisterObject>
 
 @available(OSX 10.15, *)
-typealias PartInitialGraph = Graph<DIPart>
+typealias PartInitialTree = Tree<DIPart>
 
 class DILintContext {
     var singletones: [RegisterObject] = []
@@ -97,34 +97,45 @@ class DILintContext {
         return graph
     }
     
-    // FIXME: Currently broken
+    // TODO: Support properties call in DIPart. Right now supported only struct/class calls
     @available(OSX 10.15, *)
-    func partsInitialGraph() throws -> PartInitialGraph {
-        var graph = PartInitialGraph()
+    func partsInitialTree() throws -> PartInitialTree {
+        
+        var foundParts = parts
+        guard let containerIndex = foundParts.firstIndex(where: { $0.kind == .container }) else {
+            throw DIError.containerNotFound
+        }
+        
+        let container = foundParts[containerIndex]
+        foundParts.remove(at: containerIndex)
+        
+        let tree = Tree(value: container)
         
         @discardableResult
-        func graphResolver(for part: DIPart) throws -> GraphVertex<DIPart> {
-            if graph.containsVertex(for: part) {
-                return graph.createVertex(for: part)
+        func treeResolver(for part: DIPart) throws -> Tree<DIPart> {
+            
+            if let found = tree.search(part) {
+                return found
             }
             
-            let sourceVertex = graph.createVertex(for: part)
+            let node = Tree(value: part)
             
             let parts = self.parts.filter { $0.parent == part.id }
             
             for part in parts {
-                let destinationVertex = try graphResolver(for: part)
-                graph.addNode(from: sourceVertex, to: destinationVertex)
+                let leaf = try treeResolver(for: part)
+                node.append(leaf)
             }
             
-            return sourceVertex
+            return node
+        }
+            
+        for part in foundParts.filter({ $0.parent == container.id }) {
+            let node = try treeResolver(for: part)
+            tree.append(node)
         }
         
-        for part in parts {
-            _ = try graphResolver(for: part)
-        }
-        
-        return graph
+        return tree
     }
     
     // MARK: - Private
