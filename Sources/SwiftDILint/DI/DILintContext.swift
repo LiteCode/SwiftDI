@@ -173,46 +173,8 @@ fileprivate extension PartInitialTree {
     }
 }
 
-// TODO: Move to other folder
-
-@propertyWrapper
-struct LateInit<T> {
-    
-    private var value: T?
-    
-    var wrappedValue: T {
-        get {
-            guard let value = value else {
-                fatalError("Late init value '\(T.self)' is not being initialized.")
-            }
-            
-            return value
-        }
-        
-        set {
-            self.value = newValue
-        }
-    }
-}
-
 private extension Array where Element == RegisterObject {
     func contains(objectType: ObjectType) -> Bool {
         return self.contains(where: { $0.additionalType.contains(objectType) || $0.objectType == objectType })
-    }
-}
-
-// TODO: Move to other folder
-
-import PathKit
-
-@available(OSX 10.15, *)
-struct DILintResult: Codable {
-    let version: String
-    let dependencies: DependencyGraph
-    let parts: PartInitialTree
-    
-    func save(to path: Path) throws {
-        let data = try JSONEncoder().encode(self)
-        try path.write(data)
     }
 }

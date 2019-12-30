@@ -9,7 +9,7 @@ import Foundation
 import SourceKittenFramework
 
 @available(OSX 10.15, *)
-class Linker {
+final class Linker {
     
     private let tokens: [Token]
     
@@ -17,6 +17,7 @@ class Linker {
         self.tokens = tokens
     }
     
+    /// Find and fill lint context using tokens.
     func link(into context: DILintContext) throws {
         let filtredTokens = self.removeUndefindParts(from: tokens)
         for token in filtredTokens {
@@ -75,6 +76,7 @@ class Linker {
     
     // MARK: - Private
     
+    /// We should remove unused and incorrected DIParts.
     private func removeUndefindParts(from tokens: [Token]) -> [Token] {
         var oldTokens = tokens
         var filterTokens = Array<Token>()

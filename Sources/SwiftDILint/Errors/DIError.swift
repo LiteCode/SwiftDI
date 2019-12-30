@@ -1,40 +1,11 @@
 //
-//  Errors.swift
+//  DIError.swift
 //  
 //
 //  Created by Vladislav Prusakov on 18.12.2019.
 //
 
 import Foundation
-
-protocol XcodeError: Error, CustomStringConvertible {
-    var location: FileLocation? { get }
-    var logLevel: XcodeLogLevel { get }
-    var message: String { get }
-}
-
-extension XcodeError {
-    var description: String {
-        self.description(for: self.logLevel)
-    }
-    
-    func description(for logLevel: XcodeLogLevel) -> String {
-        switch (self.location?.line, location?.file, location?.characters) {
-        case (.some(let line), .some(let file), .some(let characters)):
-            return "\(file):\(line):\(characters.location + 1): \(logLevel.rawValue): \(message)"
-        case (.some(let line), .some(let file), nil):
-            return "\(file):\(line): \(logLevel.rawValue): \(message)"
-        case (nil, .some(let file), _):
-            return "\(file):1: \(logLevel.rawValue): \(message)"
-        case (_, nil,  _):
-            return "\(logLevel.rawValue): \(message)"
-        }
-    }
-}
-
-enum XcodeLogLevel: String {
-    case error, warning
-}
 
 enum DIError: XcodeError {
     
@@ -93,45 +64,5 @@ enum DIError: XcodeError {
         }
         return message
         
-    }
-}
-
-
-enum CommandError: LocalizedError {
-    
-    case invalidSourcePath(String)
-    case unsupportedOSX(minimal: String)
-    
-    var errorDescription: String? {
-        switch self {
-        case .invalidSourcePath(let path):
-            return "Incorrected path: \(path). Path can't direct to file, set directory instead"
-        case .unsupportedOSX(let version):
-            return "Unsupported macOS version, require \(version) or higher."
-        }
-    }
-}
-
-struct ErrorCluster: LocalizedError {
-    let errors: [XcodeError]
-    let logLevel: XcodeLogLevel?
-    
-    var containsCriticalError: Bool {
-        
-        if let logLevel = logLevel {
-            return logLevel == .error
-        } else {
-            return self.errors.contains(where: { $0.logLevel == .error })
-        }
-    }
-    
-    var errorDescription: String? {
-        return errors.map {
-            if let level = self.logLevel {
-                return $0.description(for: level)
-            } else {
-                return $0.description
-            }
-        }.joined(separator: "\n")
     }
 }

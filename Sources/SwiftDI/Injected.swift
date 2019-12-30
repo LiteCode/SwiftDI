@@ -1,5 +1,5 @@
 //
-//  Injectable.swift
+//  Injected.swift
 //  
 //
 //  Created by v.a.prusakov on 27/06/2019.
@@ -11,7 +11,7 @@ import Combine
 /// Read only property wrapper injector.
 
 @propertyWrapper
-public struct Inject<Value> {
+public struct Injected<Value> {
     
     // Injectable using lazy initialization, because instead cycle dependencies will crash in init.
     typealias LazyInject = () -> Value

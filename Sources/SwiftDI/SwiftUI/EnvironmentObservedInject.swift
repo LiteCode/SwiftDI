@@ -1,5 +1,5 @@
 //
-//  EnvironmentObservedInject.swift
+//  EnvironmentObservableInjected.swift
 //  SwiftDI
 //
 //  Created by v.a.prusakov on 27/06/2019.
@@ -13,7 +13,7 @@ import Combine
 /// when it changes.
 @available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 @propertyWrapper
-public struct EnvironmentObservedInject<Value: ObservableObject>: DynamicProperty {
+public struct EnvironmentObservableInjected<Value: ObservableObject>: DynamicProperty {
     
     @ObservedObject private var _wrappedValue: Value
     public var wrappedValue: Value {

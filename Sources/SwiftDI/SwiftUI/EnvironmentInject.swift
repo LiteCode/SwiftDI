@@ -1,5 +1,5 @@
 //
-//  EnvironmentInject.swift
+//  EnvironmentInjected.swift
 //  SwiftDI
 //
 //  Created by Vladislav Prusakov on 17.11.2019.
@@ -13,7 +13,7 @@ import Combine
 /// Read only object
 @available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 @propertyWrapper
-public struct EnvironmentInject<Value: AnyObject>: DynamicProperty {
+public struct EnvironmentInjected<Value: AnyObject>: DynamicProperty {
     
     public let wrappedValue: Value
     

@@ -19,6 +19,9 @@ class ValidateCommand: Command {
     @Flag("-e", "--force-error", description: "Show errors instead of warning")
     var isForceError: Bool
     
+    @Key("--output-path", description: "Write by given path a json file with lint information")
+    var outputPath: String?
+    
     func execute() throws {
         let rootPath = Path(sourcePath)
         guard rootPath.isDirectory else {
@@ -43,8 +46,10 @@ class ValidateCommand: Command {
                 
                 let result = try context.validate()
                 
-                let outputPath = rootPath.parent().url.appendingPathComponent("dilintgraph").appendingPathExtension("json")
-                try result.save(to: Path(outputPath.path))
+                if let outputPathString = self.outputPath {
+                    try saveResult(result, at: outputPathString)
+                }
+
             } else {
                 throw CommandError.unsupportedOSX(minimal: "10.15")
             }
@@ -58,6 +63,24 @@ class ValidateCommand: Command {
                 exit(EXIT_FAILURE)
             }
         }
+    }
+    
+    // MARK: - Private
+    
+    @available(OSX 10.15, *)
+    private func saveResult(_ result: DILintResult, at path: String) throws {
+        let outputPath = Path(path)
+        
+        guard outputPath.isDirectory else {
+            throw CommandError.invalidSourcePath(path)
+        }
+        
+        guard outputPath.isWritable else {
+            throw CommandError.nonWrittablePath(path)
+        }
+        
+        let resultFilePath = outputPath.url.appendingPathComponent("dilintgraph").appendingPathExtension("json")
+        try result.save(to: resultFilePath)
     }
     
 }

@@ -9,7 +9,7 @@ import SourceKittenFramework
 import PathKit
 import Foundation
 
-class Lexer {
+final class Lexer {
     
     let file: File
     let filePath: String
@@ -28,7 +28,9 @@ class Lexer {
         return tokens
     }
     
-    func tokenizeAST(_ ast: [String : SourceKitRepresentable], line: inout Int, parent: String?) throws -> [Token] {
+    // MARK: - Private
+    
+    private func tokenizeAST(_ ast: [String : SourceKitRepresentable], line: inout Int, parent: String?) throws -> [Token] {
         var tokens = [Token]()
         
         if let kindString = SwiftDocKey.getKind(from: ast), let kind = SourceKitKind(rawValue: kindString) {
@@ -86,8 +88,6 @@ class Lexer {
         
         return tokens
     }
-    
-    // MARK: - Private
     
     private func tokenizeDIContainer(_ ast: [String : SourceKitRepresentable], line: inout Int, parent: String?) throws -> [Token]? {
         guard let name = SwiftDocKey.getName(from: ast), name == "DIContainer",

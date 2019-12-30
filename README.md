@@ -1,19 +1,24 @@
 # SwiftDI
-SwiftDI it's a tool for Dependency Injection using  `@propertyWrapper`. Right now SwiftDI is alpha version. **Be careful!**
-
-SwiftDI works with Swift 5.1 only and SwiftUI. 
+SwiftDI it's a tool for Dependency Injection in Swift using a new feature with  `@propertyWrapper`.
+SwiftDI works with Swift 5.1 and higher. Also support with SwiftUI. 
 
 Please looks at our demo `SwiftDIDemo`!
 
+## Features
+
+[x] Support SwiftUI
+[x] Compile-time linter
+[x] Dependency graph
+[ ] Graph visualisation
+[ ] Tags
+[ ] [DILint] Understanding that container passed to `SwiftDI.useContainer` method
+[ ] Unit tests
+[ ] [DILint] Support passed properties inside `DIPart`s.
+
+
 ## How it use?
 
-1) Create your container:
-
-```swift
-let container = DIContainer()
-```
-
-2) Create your assemblies extended from `DIPart`:
+1) Create your assemblies extended from `DIPart`:
 
 ```swift
 class MyAssembly: DIPart {
@@ -23,7 +28,7 @@ class MyAssembly: DIPart {
 }
 ```
 
-3) Register your objects:
+2) Register your objects inside `DIPart`:
 
 ```swift
 class MyAssembly: DIPart {
@@ -44,7 +49,7 @@ class MyAssembly: DIPart {
 }
 ```
 
-4) Load your `DIPart` to the container:
+3) Load your `DIPart`s to the DIContainer:
 
 ```swift
 
@@ -61,13 +66,13 @@ container.appendPart(MyAssembly())
 
 ```
 
-5) Set your container to `SwiftDI`:
+4) Set your container to `SwiftDI`:
 
 ```swift
 SwiftDI.useContainer(container)
 ```
 
-6) Use your DI
+5) Use your DI
 
 ```swift 
 class MyController: UIViewController {
@@ -77,9 +82,19 @@ class MyController: UIViewController {
 
 Does it! You're finish setup your DI container.
 
+## Scopes
+SwiftDI supports object scopes, you can use method `lifeCycle`
+
+```swift
+DIRegister(MyService.init)
+    .lifeCycle(.single)
+```
+
+By default life time for instance is `objectGraph`.  `objectGraph` using `Mirror` for get info about nested injectables property and it can be slowly.
+
 ## DSL
 
-1) DIGroup - Contains one or many `DIPart`s
+* DIGroup - Contains one or many `DIPart`s. 
 
 ```swift
 DIGroup {
@@ -87,14 +102,19 @@ DIGroup {
 }
 ```
 
-2) DIRegister - Register some object
+* DIRegister - Register some object
 ```swift
 DIRegister(MyService.init)
 ```
 
-also contains methods `lifeCycle()` and `as()`
+You can pass your `DIPart` to another `DIPart` for pretty flow.
 
-## SwiftDI Linter
+## How it works?
+
+SwiftDI using `@propertyWrapper` to use power of injection.
+`@Injected` it's struct uses `SwiftDI.sharedContainer` for resolve objects when `value` is call. 
+
+# SwiftDILint
 
 We also support compile time checking for you dependencies. For this magic use additional tools `swiftdi`.
 
@@ -138,16 +158,24 @@ Or if you've installed SwiftDILint via CocoaPods the script should look like thi
 `#{PODS_ROOT}/SwiftDILint/swiftdi`
 ```
 
-## SwiftDI ❤️ SwiftUI!
+### Flags and keys
+
+* `--force-error`,  `-e`
+Replace all warnings to errors. If compile-time checking will return `warning`, lint replace this to `error` and you build will fault.
+
+* `--output-path`
+Write to file your validation result by given path. These needs for visualization your graphs and `DIPart`s init tree.  
+
+# SwiftDI ❤️ SwiftUI!
 
 SwiftDI also supports `SwiftUI` framework. 
 You can inject your `BindableObject` and property automatically connect to view state.
-For this magic just use `@EnvironmentObservedInject`
+For this magic just use `@EnvironmentObservableInjected`
 
 ```swift
 struct ContentView: View {
 	
-	@EnvironmentObservedInject var viewModel: ContentViewModel
+	@EnvironmentObservableInjected var viewModel: ContentViewModel
 
 	var body: some View {
 		HStack {
@@ -157,12 +185,12 @@ struct ContentView: View {
 }
 ```
 
-For non-mutating view object use `@EnvironmentInject`:
+For non-mutating view object use `@EnvironmentInjected`:
 
 ```swift
 struct ContentView: View {
 	
-	@EnvironmentInject var authService: AuthorizationService
+	@EnvironmentInjected var authService: AuthorizationService
 
 	var body: some View {
 		HStack {
@@ -179,7 +207,7 @@ let container = DIContainer()
 let view = HomeView().inject(container: container)
 ```
 
-Or if you wanna add some method to container using method `environmentInject`:
+Or if you wanna add some instance to container using method `environmentInject`:
 
 ```swift
 
@@ -192,18 +220,3 @@ let view = HomeView().environmentInject(authService)
 
 // etc
 ```
-
-## Scopes
-SwiftDI supports object scopes, you can use method `lifeCycle`
-
-```swift
-DIRegister(MyService.init)
-	.lifeCycle(.single)
-```
-
-By default life time for instance is `objectGraph`.  `objectGraph` using `Mirror` for get info about nested injectables property and it can be slowly.
-
-## How it works?
-
-SwiftDI using `@propertyWrapper` to use power of injection.
-`@Inject` it's struct uses `SwiftDI.sharedContainer` for resolve objects when `value` is call. 
