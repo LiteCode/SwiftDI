@@ -6,14 +6,15 @@ Please looks at our demo `SwiftDIDemo`!
 
 ## Features
 
-[x] Support SwiftUI
-[x] Compile-time linter
-[x] Dependency graph
-[ ] Graph visualisation
-[ ] Tags
-[ ] [DILint] Understanding that container passed to `SwiftDI.useContainer` method
-[ ] Unit tests
-[ ] [DILint] Support passed properties inside `DIPart`s.
+- [x] Support SwiftUI
+- [x] Compile-time linter
+- [x] Dependency graph
+- [ ] Graph visualisation
+- [ ] Tags
+- [ ] [DILint] Understanding that container passed to `SwiftDI.useContainer` method
+- [ ] Unit tests
+- [ ] [DILint] Support passed properties inside `DIPart`s.
+- [ ] [DILint] Add cache
 
 
 ## How it use?
@@ -220,3 +221,7 @@ let view = HomeView().environmentInject(authService)
 
 // etc
 ```
+
+## License
+
+MIT license. See the [LICENSE](./LICENSE) file for details.
