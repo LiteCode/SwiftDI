@@ -25,7 +25,7 @@ struct SourceKitDIGroupRepresentation: Token, DIPartRepresentable {
         self.line = line
         self.offset = Int(offset)
         self.length = Int(length)
-        self.groupId = UUID().uuidString//"\(filePath)|\(line)|\(parent ?? "")_"
+        self.groupId = UUID().uuidString
         self.parent = parent
     }
 }

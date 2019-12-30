@@ -58,5 +58,7 @@ struct SourceKitInjectedPropertyRepresentation: Token {
         return DIPropertyWrapper(rawValue: propertyWrapper)
     }
     
-    static let supportedPropertyWrappers = ["Injected", "EnvironmentInjected", "EnvironmentBindableInjected"]
+    // TODO: Using type describing instead.
+    /// All supported property wrappers in SwiftDI lib.
+    static let supportedPropertyWrappers = ["Injected", "EnvironmentInjected", "EnvironmentObservableInjected"]
 }

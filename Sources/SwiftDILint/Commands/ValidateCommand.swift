@@ -79,7 +79,7 @@ class ValidateCommand: Command {
             throw CommandError.nonWrittablePath(path)
         }
         
-        let resultFilePath = outputPath.url.appendingPathComponent("dilintgraph").appendingPathExtension("json")
+        let resultFilePath = outputPath.url.appendingPathComponent("swiftdi_result").appendingPathExtension("json")
         try result.save(to: resultFilePath)
     }
     

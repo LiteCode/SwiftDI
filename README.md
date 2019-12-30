@@ -121,6 +121,17 @@ We also support compile time checking for you dependencies. For this magic use a
 
 ![](assets/swiftdilint_example.gif)
 
+## How it works?
+
+```
+Project files -> Swift AST -> Tokens -> DIParts Tree -> Find unused @Injected in tree -> Validation result.
+```
+
+SwiftDILint using [SourceKitten](https://github.com/jpsim/SourceKitten) for scaning your project files. 
+In the first, SwiftDILint get your file paths and return Swift Abstract Syntax Tree (AST), after that AST will tokenize and buuild `DIParts Tree`, for validating your `@Injected` properties. 
+
+If DIPart contains in project, but doesn't contains in `DIParts Tree` you are get `warning` in Xcode. Or if you register object, but not using it in project, you get `warning` about it too.
+
 ### Installation
 
 ### Using [CocoaPods](https://cocoapods.org):
