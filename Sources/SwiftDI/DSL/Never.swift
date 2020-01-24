@@ -8,5 +8,7 @@
 import Foundation
 
 extension Never: DIPart {
-    
+    public var body: Never {
+        fatalError()
+    }
 }
